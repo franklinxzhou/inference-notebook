@@ -30,4 +30,9 @@ This notebook is an expansion of Prof. Surya Tokdar's Statistical Inference cour
  - “statistical model + iid sample” framing, $\S$ 2.1
  Chapter 6 (the sufficiency principle, the likelihood principle)
  - sufficient statistics, likelihood function, $\S\S$ 2.2 - 2.3
- Chapter 7 (introduction to point estimation, Bayesian)
+ Chapter 7 - Chapter 9 Introduction
+ - estimation, testing, and indirect interval estimation, $\S$ 2.3
+
+ # Chapter 3: Classical Inference
+ *Fisher's Significance Testing (p-values), Neyman-Pearson Frequentism (Type I/II errors), and Confidence Intervals.*
+
