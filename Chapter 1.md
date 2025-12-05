@@ -164,7 +164,7 @@ The chaining rule, with marginalization specified above, enables a way to remove
 $$f_\mathbf{Y}(\mathbf{y}) = \int_{\mathbb{R}^{d_1}}f_\mathbf{X}(\mathbf{x})f_\mathbf{Y}(\mathbf{y}\mid \mathbf{X} = \mathbf{x})\, d\mathbf{x}$$
 Bayes' rule:
 Put the above identity into Bayes' theorem, $$f_\mathbf{X}(\mathbf{x}\mid \mathbf{Y} = \mathbf{y}) = \frac{f_\mathbf{X}(\mathbf{x})f_\mathbf{Y}(\mathbf{y}\mid \mathbf{X} = \mathbf{x})}{\int_{\mathbb{R}^{d_1}}f_\mathbf{X}(\mathbf{x})f_\mathbf{Y}(\mathbf{y}\mid \mathbf{X} = \mathbf{x})\, d\mathbf{x}}$$
-### 1.4.6 *Checking Independence*
+### 1.4.6 Independence*
 **Def** Independence
 Let $(X,Y)$ be a bivariate random vector with joint pdf or pmf $f_{X,Y}(x,y)$ and marginal pdfs or pmfs $f_X(x)$ and $f_Y(y)$. Then $X$ and $Y$ are called *independent random variables* if, for every $x\in \mathbb{R}$ and $y\in \mathbb{R}$, $$f_{X,Y}(x,y) = f_X(x)f_Y(y)$$
 If $X$ and $Y$ are independent, then the conditional pdf of $Y$ given $X=x$ is $$\begin{align*}f_Y(y\mid x) &= \frac{f_{X,Y}(x,y)}{f_X(x)}\\ &= \frac{f_X(x)f_Y(y)}{f_X(x)}\\ &= f_Y(y)\end{align*}$$
@@ -172,6 +172,12 @@ Same for the conditional pdf of $X$ given $Y = y$.
 
 It is very tedious to directly use the definition to verify the independence of $X$ and $Y$, because it requires the knowledge of the explicit form of three probability laws. Here is a lemma (C&B 4.2.7):
 **Lemma** Let $(X,Y)$ be a bivariate random vector with joint pdf or pmf $f_{X,Y}(x,y)$. Then $X$ and $Y$ are independent random variables if and only if there exists functions $g(x)$ and $h(y)$ such that, for every $x\in \mathbb{R}$ and $y\in \mathbb{R}$, $$f(x,y) = g(x)h(y)$$
+**Remark** C&B Theorem 4.6.11 provides a generalization of the aforesaid Lemma to check for the independence of $n$ random vectors. Let $\mathbf{X}_1, \dots, \mathbf{X}_n$ be random vectors. Then $\mathbf{X}_1, \dots, \mathbf{X}_n$ are mutually independent random vectors iff there exists functions $g_i(\mathbf{x}_i)$, $i = 1, \dots, n$ s.t. the joint pdf or pmf of $\mathbf{X}_1, \dots, \mathbf{X}_n$ can be written as $$f(\mathbf{x}_1, \dots, \mathbf{x}_n) = g_1(\mathbf{x}_1) \cdot \cdots \cdot g_n(\mathbf{x}_n)$$
+If we stay in the multivariate world, there are one more theorem stating the implications of independence:
+
+**Thm** (C&B 4.6.6)
+Let $X_1, \dots, X_n$ be mutually independent random variables. Let $g_1, \dots, g_n$ be real-valued functions s.t. $g_i(x_i)$ is a function only of $x_i$, $i = 1, \dots, n$. Then $$\mathbb{E}[g_1(X_1)\cdot \dots \cdot g_n(X_n)] = \mathbb{E}[g_1(X_1)]\cdot \dots \cdot \mathbb{E}[g_n(X_n)]$$
+One specific example of this theorem is the mgf that will be defined later.
 ## Worked Out Example: Multinomial distribution
 (Slide 2, Week 1) Suppose 30 US employees in food and beverage are randomly selected from the population with replacement and $\mathbf{X} = (X_1, \dots, X_6)$ denotes the category counts of their industry types. $$\mathbf{X}\sim \operatorname{Mult}(30, \mathbf{p})$$
 where $\mathbf{p} = (0.31, 0.15, 0.12, 0.09, 0.09, 0.24)\in \Delta^5$. *Note* on the notation: $\Delta^d = \{(p_1, \dots, p_{d+1})\in \mathbb{R}^{d+1}: p_i\ge 0, p_1 + \dots + p_{d+1}=1\}$.
@@ -281,6 +287,8 @@ With the aforementioned argument, it only takes a small assumption, that $\mathb
 \frac{\partial h_d(\mathbf{w})}{\partial w_1} & \frac{\partial h_d(\mathbf{w})}{\partial w_2} & \cdots & \frac{\partial h_d(\mathbf{w})}{\partial w_k}
 \end{vmatrix}$$
 $$f_\mathbf{W}(\mathbf{w}) = f_\mathbf{Y}(\mathbf{h}(\mathbf{w}))\cdot |\mathbf{J}|$$
+
+The notation is slightly different, but see B&C Theorem 4.6.12. Surya's matrix indices are slightly off or not conforming to the standard way.
 ## 1.6 *Expectation*
 **Def** The *expected value* aka *mean* of a random variable $g(X)$, denoted by $\mathbb{E}(g(X))$, is $$\mathbb{E}(g(X)) = \begin{cases}
 \int_\mathbb{R}g(x)f_X(x)\,dx & \text{if }X\text{ is continuous}\\
@@ -378,12 +386,90 @@ $$\frac{d^n}{dt^n}M_X(t)\mid_{t=0} = \mathbb{E}(X^ne^{tX})\mid_{t=0} = \mathbb{E
 **Thm** Uniqueness of Moments
 Let $F_X(x)$ and $F_Y(y)$ be two cdfs all of whose moments exist.
 (a) If $X$ and $Y$ have bounded support, then $F_X(u) = F_Y(u)$ for all $u$ if and only if $\mathbb{E}[X^r] = \mathbb{E}[Y^r]$ for all integers $r = 0,1,2,\dots$. 
-(b) If the moment generating functions exist and $M_X(t) = M_Y(t)$ for all $t$ in some neightborhood of 0, then $F_X(u) = F_Y(u)$ for all $u$. 
+(b) If the moment generating functions exist (finite) and $M_X(t) = M_Y(t)$ for all $t$ in some neighborhood of 0, then $F_X(u) = F_Y(u)$ for all $u$. 
+
+**Example** Is there any distribution sharing the moments with $\mathcal{N}(0,1)$?
+Let $W$ be any random variable with $$\mathbb{E}(W^k) = \begin{cases}0 & \text{if }k\text{ is odd}\\ 1 \times 3\times\cdots\times (k-1) &\text{if }k\text{ is even} \end{cases}$$
+For any even $k\ge 0$, $\mathbb{E}(|W|^k) = \mathbb{E}(W^k)\le k!$. For any odd $k\ge 1$, by Jensen's inequality,
+$$\mathbb{E}(|W|^k) = \mathbb{E}\left((|W|^{k+1})^\frac{k}{k+1}\right)\le \mathbb{E}\left(|W|^{k+1}\right)^{\frac{k}{k+1}} = (1\times 3\times \dots \times k)^{1-\frac{1}{k+1}}\le k!$$
+Therefore, $$\begin{align*}
+\mathbb{E}(e^{|tW|}) &= \mathbb{E}\left\{1+|tW| + \frac{|tW|^2}{2!}+\cdots\right\}\\
+&= \mathbb{E}\left\{\sum_{k=0}^\infty\frac{|tW|^k}{k!}\right\}\\
+&= \sum_{k=0}^\infty |t|^k\underbrace{\frac{\mathbb{E}\{|W|^k\}}{k!}}_{\le 1}\\
+&\le \sum_{k=0}^\infty |t|^k <\infty \qquad (|t|<1)
+\end{align*}$$ for all $t\in (-1,1)$. Thus, if $Y\in \mathcal{N}(0,1)$, then $$M_W(t) = \sum_k \mathbb{E}(W^k)\frac{t^k}{k!} = \sum_k \mathbb{E}(Y^k)\frac{t^k}{k!} = M_Y(t)$$Thus,
+$$W\Rightarrow Y$$
 
 **Thm** Convergence of mgfs
 Suppose $\{X_i, i = 1,2,\dots\}$ is a sequence of random variables, each with mgf $M_{X_i}(t)$. Furthermore, suppose that $$\lim_{i\rightarrow \infty} M_{X_i}(t) = M_X(t), \quad \text{for all }t\text{ in a neighborhood of 0,}$$ and $M_{X_i}(t)$ is an mgf. Then there is a unique cdf $F_X$ whose moments are determined by $M_X(t)$ and, for all $x$ where $F_X(x)$ is continuous, we have $$\lim_{i\rightarrow \infty} F_{X_i}(x) = F_X(x).$$
 That is, convergence, for $|t|<h$, of mgfs to an mgf implies convergence of cdfs. 
 
-*Special remark on multivariate mgf.* The mgf of a random vector $\mathbf{Y}\in \mathbb{R}^d$ is defined as the funciton $M_\mathbf{Y}: \mathbf{R}^d\to \mathbf{R}$ given by $$M_\mathbf{Y}(\mathbf{t}) = \mathbb{E}\left(e^{\mathbf{t}^\top \mathbf{Y}}\right)\qquad t\in \mathbb{R}^d$$
-## Worked Out Example
+**Remark** *Moments and mgf of a random vector.* 
+Suppose $\mathbf{X} = (X_1, \dots, X_d)^\top$ is a random vector then 
+$$\mathbb{E}(\mathbf{X}) = (\mathbb{E}(X_1), \dots, \mathbb{E}(X_d))^\top$$
+$$\begin{align*}
+\mathbb{V}\mathrm{ar}(\mathbf{X}) &= \mathbb{E}[\{\mathbf{X} - \mathbb{E}(\mathbf{X})\}\{\mathbf{X} - \mathbb{E}(\mathbf{X})\}^\top]\\
+&= \begin{pmatrix}
+\mathbb{V}\mathrm{ar}(X_1) & \mathbb{C}\mathrm{ov}(X_1, X_2) & \cdots & \mathbb{C}\mathrm{ov}(X_1, X_d)\\
+\mathbb{C}\mathrm{ov}(X_2, X_1) & \mathbb{V}\mathrm{ar}(X_2) & \cdots & \mathbb{C}\mathrm{ov}(X_2, X_d)\\
+\vdots & \vdots & \ddots & \vdots\\
+\mathbb{C}\mathrm{ov}(X_d, X_1) &\mathbb{C}\mathrm{ov}(X_d, X_2) & \cdots & \mathbb{V}\mathrm{ar}(X_d)
+\end{pmatrix}
+\end{align*}$$
+In the matrix form, if we write $\boldsymbol{\epsilon} = \mathbf{X} - \mathbb{E}(\mathbf{X})$, then $\mathbb{V}\mathrm{ar}(\mathbf{X}) = \mathbb{E}[\boldsymbol{\epsilon}\boldsymbol{\epsilon}^\top]$.  
+
+The mgf of a random vector $\mathbf{Y}\in \mathbb{R}^d$ is defined as the funciton $M_\mathbf{Y}: \mathbf{R}^d\to \mathbf{R}$ given by $$M_\mathbf{Y}(\mathbf{t}) = \mathbb{E}\left(e^{\mathbf{t}^\top \mathbf{Y}}\right)\qquad t\in \mathbb{R}^d$$
+(C&B 4.5)
+**Def** Covariance
+The *covariance* of $X$ and $Y$ is the number defined by $$\mathbb{C}\text{ov}(X,Y) = \mathbb{E}((X-\mu_X)(Y - \mu_Y))$$
+*Remember*: $\mu_X$ is the mean of $X$; $\mu_Y$ is the mean of $Y$.
+
+**Def** Correlation
+The *correlation* of $X$ and $Y$ is the number defined by $$\rho_{XY} = \frac{\mathbb{C}\text{ov}(X,Y)}{\sigma_X\sigma_Y}$$
+*Remember*: $\sigma_X$ is the standard deviation of $X$; $\sigma_Y$ is the standard deviation of $Y$.
+
+**Thm** For any random variables $X$ and $Y$, $$\mathbb{C}\text{ov}(X,Y) = \mathbb{E}[XY] - \mu_X\mu_Y$$
+**Thm** If $X$ and $Y$ are independent random variables, then $\mathbb{C}\text{ov}(X,Y) = 0$ and $\rho_{XY} = 0$.
+
+**Thm** Covariance of a linear combination of random variables
+If $X$ and $Y$ are any two random variables and $a$ and $b$ are any two constants, then $$\mathbb{V}\text{ar}(aX+bY) = a^2\mathbb{V}\text{ar}(X) + b^2\mathbb{X}\text{ar}(Y) + 2ab\mathbb{C}\text{ov}(X,Y)$$
+**Thm** For any random variables $X$ and $Y$,
+(a) $-1\le \rho_{XY} \le 1$
+(b) $|\rho_{XY}|=1$ if and only if there exists numbers $a\ne 0$ and $b$ s.t. $\mathbb{P}(Y = aX+b) = 1$. If $\rho_{XY} = 1$, then $a>0$; if $\rho_{XY} = -1$, then $a<0$.
+
+*Proof*: Consider $$h(t) = \mathbb{E}[((X-\mu_X)t + (Y-\mu_Y))^2]$$
+$$\begin{align*} h(t) &= t^2\mathbb{E}[(X-\mu_X)^2] + 2t\mathbb{E}[(X-\mu_X)(Y-\mu_Y)]+\mathbb{E}[(Y-\mu_Y)^2]\\ 
+&= t^2\mathbb{V}\mathrm{ar}(X) + 2t\mathbb{C}\mathrm{ov}(X, Y) + \mathbb{V}\mathrm{ar}(Y) \end{align*}$$
+With $h(t)\ge 0$, the aforementioned $h(t)$ has at most 1 root, leading to $$(2\mathbb{C}\mathrm{ov}(X,Y))^2 - 4\mathbb{V}\mathrm{ar}(X)\mathbb{V}\mathrm{ar}(Y)\le 0$$$$-\mathbb{V}\mathrm{ar}(X)\mathbb{V}\mathrm{ar}(Y)\le \mathbb{C}\mathrm{ov}(X,Y) \le \mathbb{V}\mathrm{ar}(X)\mathbb{V}\mathrm{ar}(Y)$$ $$-1\le \rho_{XY} \le 1$$
+When $|\rho_{XY}| = 1$, the discriminant above is exactly zero and $h(t)$ has a single root. This implies $$\mathbb{E}[((X-\mu_X)t + (Y-\mu_Y))^2] = 0,$$ which is true if and only if $$\mathbb{P}(((X-\mu_X)t + (Y-\mu_Y))^2 = 0) = 1$$ or $$\mathbb{P}((X-\mu_X)t + (Y-\mu_Y) = 0) = 1$$
+This is what is asked in the theorem, with $a = -t$ and $b = \mu_X t+\mu_Y$. 
+
+**Example** Worked-Out Example: Covariance drives linear prediction
+If we want to try to predict $Y$ by $W$, so that $\mathrm{MSE} = \mathbb{E}[(Y-W)^2]$ is minimized subjected to $W$ being:
+- Unrestricted: optimal $W=Y$.
+- A constant: optimal $W = \mathbb{E}[Y]$. 
+Let $f(c) = \mathbb{E}[(Y-c)^2]$. Expand, $f(c) = \mathbb{E}[Y^2] - 2c\mathbb{E}[Y]+c^2$. Find the derivative, $f'(c) = 2c - 2\mathbb{E}[Y]\overset{\text{set}}{=}0$, $c = \mathbb{E}[Y]$. 
+- A function of $X$: optimal $W = \mathbb{E}[Y\mid X]$.
+$$\begin{align*}
+W &= \underset{g(X)}{\arg\min} \mathbb{E}[(Y-g(X))^2]\\
+&= \underset{g(X)}{\arg\min} \mathbb{E}\left\{\underbrace{\mathbb{E}[(Y-g(X))^2\mid X]}_\text{inner expectation}\right\}
+\end{align*}$$
+Notice that the $g(X)$ that minimizes the inner expectation is $\mathbb{E}(Y)$, so $W = \mathbb{E}[Y\mid X]$. 
+* A linear function of $X$: 
+Fix $\beta$ for a moment, then we find a constant that minimizes $\mathbb{E}[(Z-\alpha)^2]$ were $Z = Y - \beta X$. This follows that the optimal $\alpha = \mathbb{E}[Y-\beta X] = \mathbb{E}[Y] - \beta\mathbb{E}[X]$.
+
+Next, we acknowledge that the intercept centers the data, so we can only focus on the centered variables: $\tilde{Y} = Y - \mathbb{E}(Y)$ and $\tilde{X} = X - \mathbb{E}(X)$. Our goal is to minimize $\mathbb{E}[(\tilde{Y} - \beta \tilde{X})^2]$. 
+
+$$
+\mathbb{E}[(\tilde{Y} - \beta \tilde{X})^2] = \mathbb{V}\mathrm{ar}(Y) - 2\beta \mathbb{C}\mathrm{ov}(X,Y) + \beta^2\mathbb{V}\mathrm{ar}(X)\\
+$$
+Take the derivative against $\beta$, $$\nabla_\beta \mathbb{E}[(\tilde{Y} - \beta \tilde{X})^2] =-2\mathbb{C}\mathrm{ov}(X,Y)+2\beta \mathbb{V}\mathrm{ar}(X) \overset{\text{set}}{=} 0$$
+The optimal $\beta$: $$\beta = \frac{\mathbb{C}\mathrm{ov}(X,Y)}{\mathbb{V}\mathrm{ar}(X)}$$
+**Example** Suppose $X\sim \mathcal{N}(0,1)$, $Z\sim \mathcal{N}(0,1)$, define $Y = X^3+Z$. To predict $Y$ by $W$ s.t. $\mathrm{MSE} = \mathbb{E}[(Y-W)^2]$ is minimized subject $W$ being:
+- unrestricted: optimal $W=Y$ with $\mathrm{MSE} = 0$. 
+- a constant: optimal $W = 0$ with $\mathrm{MSE} = 16$.
+- a function of $X$: optimal $W = X^3$ with $\mathrm{MSE} = 1$. 
+- a linear function of $X$: optimal $W = 3X$ with $\mathrm{MSE} = 7$.
 ## 1.8 *Multivariate Normal Distribution*
+
+In C&B 4.6, there is an entire section about guiding principles of multivariate normal distribution. However, Surya picks multivariate normal and covers this example in great detail in the lecture.
