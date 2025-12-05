@@ -3,7 +3,7 @@ Franklin's Statistical Inference Notebook
 
 This notebook is an expansion of Prof. Surya Tokdar's Statistical Inference course (STA 532) at Duke University. It aims to expand the lecture notes with additional explanations, examples, and derivations. It aligns the content with the textbook "Statistical Inference" by Casella and Berger (2002).
 
-For best viewing experience, open with [Obsidian][https://obsidian.md/].
+For best viewing experience, open with [Obsidian](https://obsidian.md/).
 
 # Chapter 1: Probability Review
 *Probability spaces, conditioning, random variables, expectation, moments, multivariate normal, and limit theory (WLLN, CLT).*
