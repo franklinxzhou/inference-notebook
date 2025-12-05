@@ -172,6 +172,79 @@ Same for the conditional pdf of $X$ given $Y = y$.
 
 It is very tedious to directly use the definition to verify the independence of $X$ and $Y$, because it requires the knowledge of the explicit form of three probability laws. Here is a lemma (C&B 4.2.7):
 **Lemma** Let $(X,Y)$ be a bivariate random vector with joint pdf or pmf $f_{X,Y}(x,y)$. Then $X$ and $Y$ are independent random variables if and only if there exists functions $g(x)$ and $h(y)$ such that, for every $x\in \mathbb{R}$ and $y\in \mathbb{R}$, $$f(x,y) = g(x)h(y)$$
+## Worked Out Example: Multinomial distribution
+(Slide 2, Week 1) Suppose 30 US employees in food and beverage are randomly selected from the population with replacement and $\mathbf{X} = (X_1, \dots, X_6)$ denotes the category counts of their industry types. $$\mathbf{X}\sim \operatorname{Mult}(30, \mathbf{p})$$
+where $\mathbf{p} = (0.31, 0.15, 0.12, 0.09, 0.09, 0.24)\in \Delta^5$. *Note* on the notation: $\Delta^d = \{(p_1, \dots, p_{d+1})\in \mathbb{R}^{d+1}: p_i\ge 0, p_1 + \dots + p_{d+1}=1\}$.
+
+Surya made a couple of points about the multinomial distribution:
+- Each sum of categories (super-category) count is binomial: e.g., $X_1\sim \operatorname{Binomial}(30, 0.31)$ and $X_1+X_5\sim \operatorname{Binomial}(30,0.4)$
+- *Distinct* super-categories and remaining categories are multinomial: e.g., $(X_1 + X_5, X_2 + X_3 + X_4, X_6)\sim \operatorname{Mult}(30, (0.4, 0.36, 0.24))$
+- Conditioned on a category/super-category count, remaining categories follow conditional multinomial rules: e.g., $(X_2+X_4, X_3+X_6)\mid (X_1 + X_5 = 10)\sim \operatorname{Mult}(20, \frac{0.15+0.09, 0.12+0.24}{0.6})$
+
+*Proof*: 
+**Marginal pmf of individual, e.g., $X_1$**
+Given the joint pmf of $\mathbf{X}\sim \operatorname{Mult}(n, \mathbf{p})$ is $$p(\mathbf{x}) = \begin{pmatrix} n \\ x_1, \dots, x_d \end{pmatrix}\cdot p_1^{x_1}\dots p_d^{x_d}\cdot \mathbb{I}_{\mathbf{x}\in \mathscr{C}_{n,d}} = \frac{n!}{x_1!x_2!\cdots x_d!}\cdot p_1^{x_1}\dots p_d^{x_d}\cdot \mathbb{I}_{\mathbf{x}\in \mathscr{C}_{n,d}}$$
+To find the marginal pmf of $X_1$,
+$$\begin{align*}
+p_{X_1}(x_1) &= \sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}} p(x_1, x_2, \dots, p_d)\\
+&= \sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{n!}{x_1!x_2!\cdots x_d!}p_1^{x_1}p_2^{x_2}\cdots p_d^{x_d}\\
+&= \frac{n!}{x_1!(n-x_1)!}p_1^{x_1}(1-p_1)^{x_2+\dots+x_d}\sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{(n-x_1)!}{x_2!\cdots x_d!}\left\{\frac{p_2}{1-p_1}\right\}^{x_2}\cdots\left\{\frac{p_d}{1-p_1}\right\}^{x_d}
+\end{align*}$$
+Notice that $$\sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{(n-x_1)!}{x_2!\cdots x_d!}\left\{\frac{p_2}{1-p_1}\right\}^{x_2}\cdots\left\{\frac{p_d}{1-p_1}\right\}^{x_d}$$ is a pmf of $(X_2, \dots, X_d)\sim \operatorname{Mult}(n-x_1, \tilde{p})$, where $$\tilde{p} = \left(\frac{p_2}{1-p_1}, \dots, \frac{p_d}{1-p_1}\right)\in \Delta^{d-2}$$
+$$p_{X_1}(x_1) = \begin{pmatrix}n \\ x_1\end{pmatrix}p_1^{x_1}(1-p_1)^{n-x_1}$$
+
+**Super Category pmf, e.g., $Y = X_1+X_2$**
+$$\begin{align*}
+p_Y(y) &= \begin{pmatrix} n \\ y \end{pmatrix}(p_1+p_2)^y(1-p_1-p_2)^{n-y}\\
+&\times \begin{pmatrix} y \\ x_1, x_2 \end{pmatrix} \left(\frac{p_1}{p_1+p_2}\right)^{x_1}\left(\frac{p_2}{p_1+p_2}\right)^{x_2}\\
+&\times \begin{pmatrix} n-y \\ x_3, \dots, x_d \end{pmatrix} \left(\frac{p_3}{1-p_1-p_2}\right)^{x_3}\cdots \left(\frac{p_d}{1-p_1-p_2}\right)^{x_d}\\
+&= \begin{pmatrix} n \\ y \end{pmatrix}(p_1+p_2)^y(1-p_1-p_2)^{n-y}
+\end{align*}$$
+
+**Conditional pmf, e.g., $X_3, \dots, X_d\mid Y=y$**
+$$\begin{align*}
+p_{X_3, \cdots, X_d}(x_3, \dots, x_d\mid Y = y) &= \frac{p_{Y, X_3, \dots, X_d}(y, x_3, \dots, x_d)}{p_Y(y)}\\
+&= \frac{\frac{n!}{y!x_3!\cdots x_d!}(p_1+p_2)^y p_3^{x_3}\dots p_d^{x_d}}{\frac{n!}{y!(n-y)!}(p_1+p_2)^y(1-p_1-p_2)^{n-y}}\\
+&= \frac{(n-y)!}{x_3!\cdots x_d!}\left\{\frac{p_3}{1-p_1-p_2}\right\}^{x_3}\cdots \left\{\frac{p_d}{1-p_1-p_2}\right\}^{x_d}
+\end{align*}$$
+## Worked Out Example: Dirichlet distribution
+(Slide 10, Week 1) Pólya's Urn scheme
+
+Suppose we have an urn with 7 red, 5 blue, 3 green, and 1 brown balls. Draw one ball from the urn, put it back and *add to the urn another ball of the same color*. Repeat *ad infinitum*. 
+
+Let $\mathbf{X} = (X_1, X_2, X_3, X_4)\in \Delta^3$ be the limiting fractions of red, blue, green, and brown balls in the urn. Then $\mathbf{X}\sim \operatorname{Dirichlet(7,5,3,1)}$. 
+
+Dirichlet distribution has many similar properties:
+Distinct super-categories and remaining categories are Dirichlet:
+- $(X_1+X_2, X_3, X_4)\sim \operatorname{Dirichlet}(12,3,1)$
+- $(X_1+X_2, X_3+X_4)\sim \operatorname{Dirichlet}(12,4)$
+
+$(U,1-U)\sim \operatorname{Dirichlet}(a,b)$ is also written as $U\sim \operatorname{Beta}(a,b)$.
+- $X_1\sim \operatorname{Beta}(7,9)$
+- $X_2\sim \operatorname{Beta}(5,11)$
+- $X_1+X_2\sim \operatorname{Beta}(12,4)$
+
+Conditioned on $X_4 = 0.1$, we have to renormalize since the sum of limiting probabilities $X_1+X_2+X_3 = 0.9$.
+
+*Derivation of marginal pmf of* $X_1$:
+Let $\mathbf{X} = (X_1, \dots, X_d)\sim\operatorname{Dirichlet}(\alpha_1, \dots, \alpha_d)$. On the domain $\tilde{\Delta}^{d-1} = \{(x_1, \dots, x_{d-1})\in \mathbb{R}^{d-1}: x_i\ge 0, \sum x_i \le 1\}$, the joint pdf of $\mathbf{X}_{-d}$ is 
+$$p(X_1, \dots, X_{d-1}) = \frac{1}{D(\alpha_1, \dots, \alpha_d)}x_1^{\alpha_1-1}\cdots x_{d-1}^{\alpha_{d-1}-1}\left(1-\sum_{i=1}^{d-1}\right)^{\alpha_d-1}$$
+$$\begin{align*}
+p_{X_1}(x_1) &= \int \cdots \int p(x_1, \dots, x_{d-1})\, dx_2\dots \,dx_{d-1}\\
+&= \int \cdots \int\frac{1}{D(\alpha_1, \dots, \alpha_d)}x_1^{\alpha_1-1}\cdots x_{d-1}^{\alpha_{d-1}-1}\left(1-\sum_{i=1}^{d-1}\right)^{\alpha_d-1}\, dx_2\dots \,dx_{d-1}\\
+&= \frac{x_1^{\alpha_1-1}}{D(\alpha_1, \dots, \alpha_d)}\int\cdots\int\left(\prod_{i=2}^{d-1} x_i^{\alpha_i-1}\right)\left(1-x_1-\sum_{j=2}^{d-1} x_j\right)^{\alpha_d-1}\, dx_2\dots \,dx_{d-1}
+\end{align*}$$
+Here, we can apply a change of variable: Let $$z_i = \frac{x_i}{1-x_i}, \qquad\text{for }i=2, \dots, d-1$$
+$$\begin{align*}
+p_{X_1}(x_1) &= \frac{x_1^{\alpha_1-1}}{D(\boldsymbol{\alpha})} \int \cdots \int \left( \prod_{i=2}^{d-1} [z_i(1-x_1)]^{\alpha_i-1} \right) \left[ (1-x_1)\left(1 - \sum_{j=2}^{d-1} z_j\right) \right]^{\alpha_d-1} (1-x_1)^{d-2} dz_2 \cdots dz_{d-1}\\
+&= \frac{x_1^{\alpha_1-1}(1-x_1)^{\sum_{i=2}^{d-1}(\alpha_i-1) + (\alpha_d-1) + (d-2)}}{D(\alpha_1, \dots, \alpha_d)}\int\cdots\int \left(\prod_{i=2}^{d-1}z_i^{\alpha_i-1}\right)\left(1-\sum_{j=2}^{d-1}\right)^{\alpha_d-1}\,dz_2\dots\,dz_{d-1}\\
+&= \frac{x_1^{\alpha_1-1}(1-x_1)^{(\sum_{i=2}^{d}\alpha_i) -1}}{D(\alpha_1, \dots, \alpha_d)}D(\alpha_2, \dots, \alpha_d)
+\end{align*}$$
+
+Let $\beta_i = (\sum_{i=2}^{d}\alpha_i)$, 
+$$p_{X_1}(x_1) = \frac{x_1^{\alpha_1-1}(1-x_1)^{\beta_1 -1}}{B(\alpha_1, \beta_1)}$$
+
+This shows that $X_1\sim \operatorname{Beta}(\alpha_1, \beta_1)$.
 ## 1.5 *Change of Variable*
 *Case of univariate transformations, according to C&B 2.1*
 
@@ -208,7 +281,7 @@ With the aforementioned argument, it only takes a small assumption, that $\mathb
 \frac{\partial h_d(\mathbf{w})}{\partial w_1} & \frac{\partial h_d(\mathbf{w})}{\partial w_2} & \cdots & \frac{\partial h_d(\mathbf{w})}{\partial w_k}
 \end{vmatrix}$$
 $$f_\mathbf{W}(\mathbf{w}) = f_\mathbf{Y}(\mathbf{h}(\mathbf{w}))\cdot |\mathbf{J}|$$
-## 1.6 Expectation
+## 1.6 *Expectation*
 **Def** The *expected value* aka *mean* of a random variable $g(X)$, denoted by $\mathbb{E}(g(X))$, is $$\mathbb{E}(g(X)) = \begin{cases}
 \int_\mathbb{R}g(x)f_X(x)\,dx & \text{if }X\text{ is continuous}\\
 \sum_{x\in \mathcal{X}}g(x)f_X(x) = \sum_{x\in \mathcal{X}}g(x)\mathbb{P}(X=x) & \text{if }X\text{ is discrete}
@@ -240,3 +313,77 @@ As this inequality holds for every $x$ in the domain of $h$, $$h(X)\ge h(\mathbb
 Take the expectation, $$\mathbb{E}(h(X))\ge \mathbb{E}(h(\mathbb{E}(X)))+ \mathbb{E}(a(X- \mathbb{E}(X)))$$
 $$\mathbb{E}(h(X))\ge h(\mathbb{E}(X)) + a(\mathbb{E}(X) - \mathbb{E}(X))$$
 $$\mathbb{E}(h(X))\ge h(\mathbb{E}(X))$$
+
+## 1.7 *Moments*
+C&B 2.3 (univariate), 4.5 (multivariate)
+**Def** Moments, Central moment
+For each integer $n$, the $n$-th *moment* of $X$, $\mu'_n$, is $$\mu'_n = \mathbb{E}(X^n)$$
+The $n$-th *central moment* of $X$, $\mu_n$, is $$\mu_n = \mathbb{E}[(X-\mu)^n]$$
+where $\mu = \mu'_1 = \mathbb{E}(X)$. 
+
+**Def** Variance
+The *variance* of a random variable $X$ is its second central moment, $\mathbb{V}\text{ar}(X) = \mathbb{E}[(X-\mathbb{E}(X))^2]$. The positive square root of $\mathbb{V}\text{ar}(X)$ is the *standard deviation* of $X$. 
+
+Additional properties of variance:
+(a) $\mathbb{V}\text{ar}(aX+b) = a^2\mathbb{V}\text{ar}(X)$
+*Proof*: Use $\mathbb{E}[(X-\mathbb{E}(X))^2]$. Expand with brutal force.
+
+(b) (Chebyshev) $\mathbb{P}(|Y-\mathbb{E}(Y)|>t)\le \mathbb{V}\text{ar}(Y)/t^2$ for $t>0$
+*Proof*: Consider the condition inside the probability. With $t>0$, squaring both sides preserves the order. $$(Y - \mathbb{E}(Y))^2 > t^2$$
+Therefore, $$\mathbb{P}(|Y-\mathbb{E}(Y)|>t) = \mathbb{P}((Y - \mathbb{E}(Y))^2 > t^2)$$
+By Markov's inequality, $$\mathbb{P}((Y - \mathbb{E}(Y))^2 > t^2) \le \frac{\mathbb{E}[(Y-\mu)^2]}{t^2}$$
+Notice that $\mathbb{E}[(Y-\mu)^2]$ is equal to $\mathbb{V}\text{ar}(Y)$. This gives $$\mathbb{P}((Y - \mathbb{E}(Y))^2 > t^2) \le \frac{\mathbb{V}\text{ar}(Y)}{t^2}$$
+$$\mathbb{P}(|Y-\mathbb{E}(Y)|>t) \le \frac{\mathbb{V}\text{ar}(Y)}{t^2}$$
+
+(c) (Total Law) $\mathbb{V}\text{ar}(Y) = \mathbb{E}[\mathbb{V}\text{ar}(Y\mid X)] + \mathbb{V}\text{ar}[\mathbb{E}(Y\mid X)]$
+*Proof*: Conditioning on $X$ does not alter the definition of $\mathbb{V}\text{ar}(Y\mid X)$. Hence, $$\mathbb{V}\text{ar}(Y\mid X) = \mathbb{E}[Y^2\mid X] - (\mathbb{E}[Y\mid X])^2$$
+Take the expectation, $$\mathbb{E}[\mathbb{V}\text{ar}(Y\mid X)] = \mathbb{E}[Y^2] - \mathbb{E}[(\mathbb{E}[Y\mid X])^2]$$
+For the expectation inside variance, $$\mathbb{V}\text{ar}(\mathbb{E}[Y\mid X]) = \mathbb{E}[(\mathbb{E}[Y\mid X])^2] - (\mathbb{E}[Y])^2$$
+Add the two, $$\mathbb{E}[\mathbb{V}\text{ar}(Y\mid X)] + \mathbb{V}\text{ar}(\mathbb{E}[Y\mid X]) = \mathbb{E}[Y^2] - (\mathbb{E}[Y])^2 = \mathbb{V}\text{ar}(Y)$$
+**Example** Find the $k$-th moments of the Standard Normal distribution ($Y \sim \mathcal{N}(0,1)$), with $k$ even.
+(Slides 3, Week 2)
+
+This derivation involves the *Law of the Unconscious Statistician/Lazy Statistician's Theorem*, $$\mathbb{E}[g(y)] = \int g(y)f_Y(y)\,dy$$Notice that for $\mathcal{N}(0,1)$, $$f_Y(y) = \frac{1}{\sqrt{2\pi}}\exp(-y^2/2)$$
+$$\begin{align*}
+\mathbb{E}[Y^k] &= \int_{-\infty}^\infty y^k\frac{1}{\sqrt{2\pi}}e^{-\frac{y^2}{2}}\,dy\\
+&= \frac{2}{\sqrt{2\pi}}\int_0^\infty y^k e^{-\frac{y^2}{2}}\,dy\\
+\end{align*}$$
+We pause here to perform change of variable. Let $z = y^2/2$, 
+$$\begin{align*}
+\mathbb{E}[Y^k] &= \frac{2}{\sqrt{2\pi}}\int_0^\infty 2^{k/2}z^{k/2}e^{-z}\left(\frac{1}{\sqrt{2}}z^{-1/2}\right)\,dz\\
+&= \frac{2^{k/2}}{\sqrt{\pi}}\int_0^\infty z^{\frac{k+1}{2}-1}e^{-z}\,dz\\
+&= \frac{2^{k/2}}{\sqrt{\pi}}\Gamma\left(\frac{k+1}{2}\right)
+\end{align*}$$
+
+What is special about this? $$\begin{align*}
+\mathbb{E}[Y^{k+2}] &= \frac{2^\frac{k+2}{2}}{\sqrt{\pi}}\Gamma\left(\frac{k+2+1}{2}\right)\\
+&= 2\cdot \frac{2^{k/2}}{\sqrt{\pi}}\Gamma\left(\frac{k+1}{2}+1\right)\\
+&= 2\cdot \frac{2^{k/2}}{\sqrt{\pi}}\left(\frac{k+1}{2}\right)\Gamma\left(\frac{k+1}{2}\right)\\
+&= (k+1)\mathbb{E}[Y^k]
+\end{align*}$$
+Therefore, with $E[Y^2] = 1$, $\mathbb{E}[Y^4]= 1\times 3$, $\dots$
+
+**Def** Moment Generating Function
+Let $X$ be a random variable with cdf $F_X$. The *moment generating function (mgf)* of $X$, denoted by $M_X(t)$, is $$M_X(t) = \mathbb{E}(e^{tX}),$$ provided that such expectation exists for $t$ in some neighborhood of 0. 
+
+**Thm** If $X$ has mgf $M_X(t)$, then $$\mathbb{E}(X^n) = M^{(n)}_X(0)$$ where we define $$M_X^{(n)}(0) = \frac{d^n}{dt^n} M_x(t)\mid_{t=0}$$
+*Proof*: $$\frac{d}{dt}M_x(t) = \frac{d}{dt}\int_\mathbb{R}e^{tx}f_X(x)\,dx$$
+Assuming we can differentiate under the integral sign (see C&B section 2.4), $$\frac{d}{dt}M_X(t) = \int_\mathbb{R}\left(\frac{d}{dt}e^{tx}\right)f_X(x)\,dx$$
+$$\frac{d}{dt}M_X(t) = \int_\mathbb{R}(xe^{tx})f_X(x)\,dx$$
+$$\frac{d}{dt}M_X(t) = \mathbb{E}(Xe^{tX})$$
+When $n=1$, the case of $M'_X(t)$, $$\frac{d}{dt}M_X(t)\mid_{t=0} = \mathbb{E}(Xe^{tX})\mid_{t=0} = E(X)$$
+$$\vdots$$
+$$\frac{d^n}{dt^n}M_X(t)\mid_{t=0} = \mathbb{E}(X^ne^{tX})\mid_{t=0} = \mathbb{E}(X^n)$$
+
+**Thm** Uniqueness of Moments
+Let $F_X(x)$ and $F_Y(y)$ be two cdfs all of whose moments exist.
+(a) If $X$ and $Y$ have bounded support, then $F_X(u) = F_Y(u)$ for all $u$ if and only if $\mathbb{E}[X^r] = \mathbb{E}[Y^r]$ for all integers $r = 0,1,2,\dots$. 
+(b) If the moment generating functions exist and $M_X(t) = M_Y(t)$ for all $t$ in some neightborhood of 0, then $F_X(u) = F_Y(u)$ for all $u$. 
+
+**Thm** Convergence of mgfs
+Suppose $\{X_i, i = 1,2,\dots\}$ is a sequence of random variables, each with mgf $M_{X_i}(t)$. Furthermore, suppose that $$\lim_{i\rightarrow \infty} M_{X_i}(t) = M_X(t), \quad \text{for all }t\text{ in a neighborhood of 0,}$$ and $M_{X_i}(t)$ is an mgf. Then there is a unique cdf $F_X$ whose moments are determined by $M_X(t)$ and, for all $x$ where $F_X(x)$ is continuous, we have $$\lim_{i\rightarrow \infty} F_{X_i}(x) = F_X(x).$$
+That is, convergence, for $|t|<h$, of mgfs to an mgf implies convergence of cdfs. 
+
+*Special remark on multivariate mgf.* The mgf of a random vector $\mathbf{Y}\in \mathbb{R}^d$ is defined as the funciton $M_\mathbf{Y}: \mathbf{R}^d\to \mathbf{R}$ given by $$M_\mathbf{Y}(\mathbf{t}) = \mathbb{E}\left(e^{\mathbf{t}^\top \mathbf{Y}}\right)\qquad t\in \mathbb{R}^d$$
+## Worked Out Example
+## 1.8 *Multivariate Normal Distribution*
