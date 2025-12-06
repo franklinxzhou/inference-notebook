@@ -179,24 +179,24 @@ If we stay in the multivariate world, there are one more theorem stating the imp
 Let $X_1, \dots, X_n$ be mutually independent random variables. Let $g_1, \dots, g_n$ be real-valued functions s.t. $g_i(x_i)$ is a function only of $x_i$, $i = 1, \dots, n$. Then $$\mathbb{E}[g_1(X_1)\cdot \dots \cdot g_n(X_n)] = \mathbb{E}[g_1(X_1)]\cdot \dots \cdot \mathbb{E}[g_n(X_n)]$$
 One specific example of this theorem is the mgf that will be defined later.
 ## Worked Out Example: Multinomial distribution
-(Slide 2, Week 1) Suppose 30 US employees in food and beverage are randomly selected from the population with replacement and $\mathbf{X} = (X_1, \dots, X_6)$ denotes the category counts of their industry types. $$\mathbf{X}\sim \operatorname{Mult}(30, \mathbf{p})$$
+(Slide 2, Week 1) Suppose 30 US employees in food and beverage are randomly selected from the population with replacement and $\mathbf{X} = (X_1, \dots, X_6)$ denotes the category counts of their industry types. $$\mathbf{X}\sim \mathrm{Mult}(30, \mathbf{p})$$
 where $\mathbf{p} = (0.31, 0.15, 0.12, 0.09, 0.09, 0.24)\in \Delta^5$. *Note* on the notation: $\Delta^d = \{(p_1, \dots, p_{d+1})\in \mathbb{R}^{d+1}: p_i\ge 0, p_1 + \dots + p_{d+1}=1\}$.
 
 Surya made a couple of points about the multinomial distribution:
-- Each sum of categories (super-category) count is binomial: e.g., $X_1\sim \operatorname{Binomial}(30, 0.31)$ and $X_1+X_5\sim \operatorname{Binomial}(30,0.4)$
-- *Distinct* super-categories and remaining categories are multinomial: e.g., $(X_1 + X_5, X_2 + X_3 + X_4, X_6)\sim \operatorname{Mult}(30, (0.4, 0.36, 0.24))$
-- Conditioned on a category/super-category count, remaining categories follow conditional multinomial rules: e.g., $(X_2+X_4, X_3+X_6)\mid (X_1 + X_5 = 10)\sim \operatorname{Mult}(20, \frac{0.15+0.09, 0.12+0.24}{0.6})$
+- Each sum of categories (super-category) count is binomial: e.g., $X_1\sim \mathrm{Binomial}(30, 0.31)$ and $X_1+X_5\sim \mathrm{Binomial}(30,0.4)$
+- *Distinct* super-categories and remaining categories are multinomial: e.g., $(X_1 + X_5, X_2 + X_3 + X_4, X_6)\sim \mathrm{Mult}(30, (0.4, 0.36, 0.24))$
+- Conditioned on a category/super-category count, remaining categories follow conditional multinomial rules: e.g., $(X_2+X_4, X_3+X_6)\mid (X_1 + X_5 = 10)\sim \mathrm{Mult}(20, \frac{0.15+0.09, 0.12+0.24}{0.6})$
 
 *Proof*: 
 **Marginal pmf of individual, e.g., $X_1$**
-Given the joint pmf of $\mathbf{X}\sim \operatorname{Mult}(n, \mathbf{p})$ is $$p(\mathbf{x}) = \begin{pmatrix} n \\ x_1, \dots, x_d \end{pmatrix}\cdot p_1^{x_1}\dots p_d^{x_d}\cdot \mathbb{I}_{\mathbf{x}\in \mathscr{C}_{n,d}} = \frac{n!}{x_1!x_2!\cdots x_d!}\cdot p_1^{x_1}\dots p_d^{x_d}\cdot \mathbb{I}_{\mathbf{x}\in \mathscr{C}_{n,d}}$$
+Given the joint pmf of $\mathbf{X}\sim \mathrm{Mult}(n, \mathbf{p})$ is $$p(\mathbf{x}) = \begin{pmatrix} n \\ x_1, \dots, x_d \end{pmatrix}\cdot p_1^{x_1}\dots p_d^{x_d}\cdot \mathbb{I}_{\mathbf{x}\in \mathscr{C}_{n,d}} = \frac{n!}{x_1!x_2!\cdots x_d!}\cdot p_1^{x_1}\dots p_d^{x_d}\cdot \mathbb{I}_{\mathbf{x}\in \mathscr{C}_{n,d}}$$
 To find the marginal pmf of $X_1$,
 $$\begin{align*}
 p_{X_1}(x_1) &= \sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}} p(x_1, x_2, \dots, p_d)\\
 &= \sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{n!}{x_1!x_2!\cdots x_d!}p_1^{x_1}p_2^{x_2}\cdots p_d^{x_d}\\
 &= \frac{n!}{x_1!(n-x_1)!}p_1^{x_1}(1-p_1)^{x_2+\dots+x_d}\sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{(n-x_1)!}{x_2!\cdots x_d!}\left\{\frac{p_2}{1-p_1}\right\}^{x_2}\cdots\left\{\frac{p_d}{1-p_1}\right\}^{x_d}
 \end{align*}$$
-Notice that $$\sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{(n-x_1)!}{x_2!\cdots x_d!}\left\{\frac{p_2}{1-p_1}\right\}^{x_2}\cdots\left\{\frac{p_d}{1-p_1}\right\}^{x_d}$$ is a pmf of $(X_2, \dots, X_d)\sim \operatorname{Mult}(n-x_1, \tilde{p})$, where $$\tilde{p} = \left(\frac{p_2}{1-p_1}, \dots, \frac{p_d}{1-p_1}\right)\in \Delta^{d-2}$$
+Notice that $$\sum_{(x_2, \dots, x_d)\in \mathscr{C}_{n-x_1,d-1}}\frac{(n-x_1)!}{x_2!\cdots x_d!}\left\{\frac{p_2}{1-p_1}\right\}^{x_2}\cdots\left\{\frac{p_d}{1-p_1}\right\}^{x_d}$$ is a pmf of $(X_2, \dots, X_d)\sim \mathrm{Mult}(n-x_1, \tilde{p})$, where $$\tilde{p} = \left(\frac{p_2}{1-p_1}, \dots, \frac{p_d}{1-p_1}\right)\in \Delta^{d-2}$$
 $$p_{X_1}(x_1) = \begin{pmatrix}n \\ x_1\end{pmatrix}p_1^{x_1}(1-p_1)^{n-x_1}$$
 
 **Super Category pmf, e.g., $Y = X_1+X_2$**
@@ -218,22 +218,22 @@ p_{X_3, \cdots, X_d}(x_3, \dots, x_d\mid Y = y) &= \frac{p_{Y, X_3, \dots, X_d}(
 
 Suppose we have an urn with 7 red, 5 blue, 3 green, and 1 brown balls. Draw one ball from the urn, put it back and *add to the urn another ball of the same color*. Repeat *ad infinitum*. 
 
-Let $\mathbf{X} = (X_1, X_2, X_3, X_4)\in \Delta^3$ be the limiting fractions of red, blue, green, and brown balls in the urn. Then $\mathbf{X}\sim \operatorname{Dirichlet(7,5,3,1)}$. 
+Let $\mathbf{X} = (X_1, X_2, X_3, X_4)\in \Delta^3$ be the limiting fractions of red, blue, green, and brown balls in the urn. Then $\mathbf{X}\sim \mathrm{Dirichlet(7,5,3,1)}$. 
 
 Dirichlet distribution has many similar properties:
 Distinct super-categories and remaining categories are Dirichlet:
-- $(X_1+X_2, X_3, X_4)\sim \operatorname{Dirichlet}(12,3,1)$
-- $(X_1+X_2, X_3+X_4)\sim \operatorname{Dirichlet}(12,4)$
+- $(X_1+X_2, X_3, X_4)\sim \mathrm{Dirichlet}(12,3,1)$
+- $(X_1+X_2, X_3+X_4)\sim \mathrm{Dirichlet}(12,4)$
 
-$(U,1-U)\sim \operatorname{Dirichlet}(a,b)$ is also written as $U\sim \operatorname{Beta}(a,b)$.
-- $X_1\sim \operatorname{Beta}(7,9)$
-- $X_2\sim \operatorname{Beta}(5,11)$
-- $X_1+X_2\sim \operatorname{Beta}(12,4)$
+$(U,1-U)\sim \mathrm{Dirichlet}(a,b)$ is also written as $U\sim \mathrm{Beta}(a,b)$.
+- $X_1\sim \mathrm{Beta}(7,9)$
+- $X_2\sim \mathrm{Beta}(5,11)$
+- $X_1+X_2\sim \mathrm{Beta}(12,4)$
 
 Conditioned on $X_4 = 0.1$, we have to renormalize since the sum of limiting probabilities $X_1+X_2+X_3 = 0.9$.
 
 *Derivation of marginal pmf of* $X_1$:
-Let $\mathbf{X} = (X_1, \dots, X_d)\sim\operatorname{Dirichlet}(\alpha_1, \dots, \alpha_d)$. On the domain $\tilde{\Delta}^{d-1} = \{(x_1, \dots, x_{d-1})\in \mathbb{R}^{d-1}: x_i\ge 0, \sum x_i \le 1\}$, the joint pdf of $\mathbf{X}_{-d}$ is 
+Let $\mathbf{X} = (X_1, \dots, X_d)\sim\mathrm{Dirichlet}(\alpha_1, \dots, \alpha_d)$. On the domain $\tilde{\Delta}^{d-1} = \{(x_1, \dots, x_{d-1})\in \mathbb{R}^{d-1}: x_i\ge 0, \sum x_i \le 1\}$, the joint pdf of $\mathbf{X}_{-d}$ is 
 $$p(X_1, \dots, X_{d-1}) = \frac{1}{D(\alpha_1, \dots, \alpha_d)}x_1^{\alpha_1-1}\cdots x_{d-1}^{\alpha_{d-1}-1}\left(1-\sum_{i=1}^{d-1}\right)^{\alpha_d-1}$$
 $$\begin{align*}
 p_{X_1}(x_1) &= \int \cdots \int p(x_1, \dots, x_{d-1})\, dx_2\dots \,dx_{d-1}\\
@@ -250,7 +250,7 @@ p_{X_1}(x_1) &= \frac{x_1^{\alpha_1-1}}{D(\boldsymbol{\alpha})} \int \cdots \int
 Let $\beta_i = (\sum_{i=2}^{d}\alpha_i)$, 
 $$p_{X_1}(x_1) = \frac{x_1^{\alpha_1-1}(1-x_1)^{\beta_1 -1}}{B(\alpha_1, \beta_1)}$$
 
-This shows that $X_1\sim \operatorname{Beta}(\alpha_1, \beta_1)$.
+This shows that $X_1\sim \mathrm{Beta}(\alpha_1, \beta_1)$.
 ## 1.5 *Change of Variable*
 *Case of univariate transformations, according to C&B 2.1*
 
@@ -473,3 +473,58 @@ The optimal $\beta$: $$\beta = \frac{\mathbb{C}\mathrm{ov}(X,Y)}{\mathbb{V}\math
 ## 1.8 *Multivariate Normal Distribution*
 
 In C&B 4.6, there is an entire section about guiding principles of multivariate normal distribution. However, Surya picks multivariate normal and covers this example in great detail in the lecture.
+
+**Def** *Multivariate Normal*
+A random vector $\mathbf{Y}\in \mathbb{R}^d$ is a normal random vector if $\forall \mathbf{a}\in \mathbb{R}^d$, the random variable $W = \mathbf{a}^\top \mathbf{Y}$ is normally distributed. 
+
+**Remark** This definition of multivariate normal distribution is sufficient to say that the distribution of a multivariate normally distributed random vector is completely determined by its mean and variance. With $\mathbb{E}(\mathbf{X}) = \boldsymbol{\mu}$, $\mathbb{V}\mathrm{ar}(\mathbf{X}) = \boldsymbol{\Sigma}$, $$M_\mathbf{X}(\mathbf{t}) = \exp(\boldsymbol{\mu}^\top\mathbf{t} + \mathbf{t}^\top\boldsymbol{\Sigma}\mathbf{t}/2)$$$$p_\mathbf{X}(\mathbf{x}) = \frac{1}{(2\pi)^{d/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\left(-\frac{(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})}{2}\right)$$ (if $\boldsymbol{\Sigma}$ is positive definite)
+
+**Remark** If $\mathbf{X}$ is a normal random vector, then $X_i\sqcup X_j\Leftrightarrow \mathbb{C}\mathrm{or}(X_i, X_j) = 0$.
+
+## 1.9 *Properties of a Random Sample*
+
+We start with a definition that is often overlooked and leads to confusion of "when should we assume i.i.d."
+
+**Def** Random sample
+The random variables $X_1, \dots, X_n$ are called a *random sample* of size $n$ from the population $f(x)$ if $X_1, \dots, X_n$ are mutually independent random variables and the marginal pdf or pmf of each $X_i$ is the same function $f(x)$. This random sample is called *independent and identically distributed* (i.i.d.) random variables with pdf or pmf $f(x)$. 
+
+**Def** Statistic; sampling distribution
+Let $X_1, \dots, X_n$ be a random sample of size $n$ from a population and let $T(x_1, \dots, x_n)$ ne a real-valued or vector-valued function whose domain includes the sample space of $(X_1, \dots, X_n)$. Then the random variable or random vector $Y = T(X_1, \dots, X_n)$ is called a *statistic*. The probability distribution of a statistic $Y$ is called the *sampling distribution* of $Y$. 
+
+**Thm** Let $x_1, \dots, x_n$ be any numbers and $\bar{x} = (x_1 + \dots + x_n)/n$. Then, 
+(a) $\min_a \sum_{i=1}^n (x_i - a)^2 = \sum_{i=1}^n (x_i - \bar{x})^2$;
+(b) $(n-1)s^2 = \sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n\bar{x}^2$. 
+
+*Proof*: 
+$$\begin{align*} 
+\sum_{i=1}^n (x_i - a)^2 &= \sum_{i=1}^n ((x_i - \bar{x}) + (\bar{x} - a))^2\\
+&= \sum_{i=1}^n (x_i - \bar{x})^2 + 2(\bar{x} - a)\sum_{i=1}^n (x_i - \bar{x}) + n(\bar{x} - a)^2\\
+&= \sum_{i=1}^n (x_i - \bar{x})^2 + n(\bar{x} - a)^2\\
+\end{align*}$$
+Since $\sum_{i=1}^n (x_i - \bar{x})^2\ge 0$, $n(\bar{x} - a)^2\ge 0$, choosing $a = \bar{x}$ reduces the second term to 0 and therefore, minimizes $\sum_{i=1}^n (x_i - a)^2$.
+
+If we put in $a=0$ in the final arranged form,
+$$
+\sum_{i=1}^n x_i^2 = \sum_{i=1}^n (x_i - \bar{x})^2 + n\bar{x}^2\\
+$$
+Then, $$\sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n\bar{x}^2$$
+**Thm** Let $X_1, \dots, X_n$ be a random sample from a population with mean $\mu$ and variance $\sigma^2<\infty$. Suppose $S$ refers to the *sample variance*. Then
+(a) $\mathbb{E}[\bar{X}] = \mu$
+(b) $\displaystyle\mathbb{V}\mathrm{ar}(\bar{X}) = \frac{\sigma^2}{n}$
+(c) $\mathbb{E}(S^2) = \sigma^2$
+*Proof*: 
+(a) $$\mathbb{E}(\bar{X}) = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n}\mathbb{E}\left(\sum_{i=1}^n X_i\right) = \frac{1}{n}\cdot n\mathbb{E}(X_1) = \mu$$
+(b) $$\mathbb{V}\mathrm{ar}(\bar{X}) = \mathbb{V}\mathrm{ar}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2} \mathbb{V}\mathrm{ar}\left(\sum_{i=1}^n X_i\right) = \frac{1}{n^2} \cdot n\mathbb{V}\mathrm{ar}(X_1) = \frac{\sigma^2}{n}$$
+A little justification of $\mathbb{V}\mathrm{ar}\left(\sum_{i=1}^n X_i\right) = n\mathbb{V}\mathrm{ar}(X_1)$: $$\mathbb{V}\mathrm{ar}\left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \mathbb{V}\mathrm{ar}\left(X_i\right) + 2\sum_{i<j}\mathbb{C}\mathrm{ov}(X_i, X_j),$$ where the covariance terms are zero due to independence.
+
+(c) $$\begin{align*}
+\mathbb{E}(S^2) &= \mathbb{E}\left(\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right)\\
+&= \mathbb{E}\left(\frac{1}{n-1}\left[\sum_{i=1}^n X_i^2 - n\bar{X}^2\right]\right)\\
+&= \frac{1}{n-1}\mathbb{E}\left[\sum_{i=1}^n X_i^2\right] - \frac{n}{n-1}\mathbb{E}(\bar{X}^2)\\
+&= \frac{1}{n-1}\sum_{i=1}^n\mathbb{E}(X_i^2) - \frac{n}{n-1}\mathbb{E}(\bar{X}^2)\\
+&= \frac{n}{n-1}\mathbb{E}(X_1^2) - \frac{n}{n-1}\mathbb{E}(\bar{X}^2)\\
+&= \frac{n}{n-1}\left((\sigma^2+\mu^2)-\left(\frac{\sigma^2}{n}+\mu^2\right)\right)\\
+&= \sigma^2
+\end{align*}$$
+
+
