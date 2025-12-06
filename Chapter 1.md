@@ -483,7 +483,7 @@ A random vector $\mathbf{Y}\in \mathbb{R}^d$ is a normal random vector if $\fora
 
 ## 1.9 *Properties of a Random Sample*
 
-We start with a definition that is often overlooked and leads to confusion of "when should we assume i.i.d."
+A big part of the section only appears in Surya's in-lecture slides but missing from his lecture notes, so I will mainly rely on B&C $\S$ 5.1 - 5.3. We start with a definition that is often overlooked and leads to confusion of "when should we assume i.i.d."
 
 **Def** Random sample
 The random variables $X_1, \dots, X_n$ are called a *random sample* of size $n$ from the population $f(x)$ if $X_1, \dots, X_n$ are mutually independent random variables and the marginal pdf or pmf of each $X_i$ is the same function $f(x)$. This random sample is called *independent and identically distributed* (i.i.d.) random variables with pdf or pmf $f(x)$. 
@@ -526,5 +526,72 @@ A little justification of $\mathbb{V}\mathrm{ar}\left(\sum_{i=1}^n X_i\right) = 
 &= \frac{n}{n-1}\left((\sigma^2+\mu^2)-\left(\frac{\sigma^2}{n}+\mu^2\right)\right)\\
 &= \sigma^2
 \end{align*}$$
+### 1.9.1 Sampling from the Normal Distribution
+**Prop** We use the notation $\chi^2_p$ to denote a $\chi^2$-random variable with $p$ degrees of freedom.
+(a) If $Z\sim \mathcal{N}(0,1)$, then $Z^2\sim \chi_1^2$; 
+(b) If $X_1, \dots, X_n$ are independent and $X_i\sim \chi^2_{p_i}$, then $X_1 + \dots + X_n\sim \chi^2_{p_1 + \dots + p_n}$. 
+
+**Thm** Let $X_1, \dots, X_n$ be a random sample from a $\mathcal{N}(\mu, \sigma^2)$ distribution and let $\bar{X} = (1/n)\sum_{i=1}^n X_i$ and $S^2 = [1/(n-1)]\sum_{i=1}^n (X_i - \bar{X})^2$. Then
+(a) $\bar{X}$ and $S^2$ are independent random variables.
+(b) $\bar{X}\sim\mathcal{N}(\mu, \sigma^2/n)$.
+(c) $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. 
+
+*To be honest, I am completely lost in both Surya's and Casella & Berger's proofs of this theorem, so I decide to start my own.*
+
+*Proof*:
+As a general setup, we assume $$X_1, \dots, X_n\overset{\text{iid}}{\sim}\mathcal{N}(\mu,\sigma^2),$$ which can be written in the vector form as $$\mathbf{X} = \begin{pmatrix} X_1\\ \vdots \\ X_n\end{pmatrix}\sim \mathcal{N}_n(\mu\mathbf{1}_n, \sigma^2I_n)$$
+We can construct an orthogonal matrix $\mathbf{A}$ s.t. $\mathbf{A}\mathbf{A}^\top = \mathbf{A}^\top \mathbf{A} = I_n$. One way to construct such $\mathbf{A}$ results in the form like the follows: For row 1, $$a_1^\top = \frac{1}{\sqrt{n}}\underbrace{(1,1,\dots, 1)}_{n\text{ times}}$$
+For row $j$, where $j = 2, \dots, n$, $$v_j = (\underbrace{1,\dots, 1}_{j-1\text{ times}}, -(j-1), 0, \dots, 0)$$ and the $a_j$ is given by $$a_j^\top = \frac{v_j}{\lVert v_j \rVert}$$
+This gives the matrix $\mathbf{A}$, $$\mathbf{A} = \begin{pmatrix}
+a_1^\top \\ a_2^\top \\ \vdots \\ a_n^\top
+\end{pmatrix}$$
+Let $\mathbf{Y} = \mathbf{AX}$. Since $\mathbf{X}\sim\mathcal{N}_n(\mu\mathbf{1}_n, \sigma^2I_n)$, $\mathbf{Y}\sim \mathcal{N}_n(\mathbf{A}(\mu\mathbf{1}_n), \mathbf{A}(\sigma^2I_n)\mathbf{A}^\top) = \mathcal{N}_n(\mu\mathbf{A}\mathbf{1}_n, \sigma^2I_n)$. 
+
+We stop here for a moment for some remarks: 
+* $\mathbf{A}\mathbf{1} = \sqrt{n}e_1$, where $e_1 = (1, 0, \dots, 0)^\top$. 
+* $\mathbb{E}(Y) = \mu\mathbf{A}\mathbf{1} = \mu\sqrt{n}e_1$
+* The covariance of $\mathbf{Y}$ is $\sigma^2I_n$. 
+* Since the covariance matrix is diagonal, all $Y_j$ are mutually independent. 
+
+Notice that in accordance with our definition of $\mathbf{A}$, $$Y_1 = a_1^\top \mathbf{X} = \frac{1}{\sqrt{n}}\sum_{i=1}^n X_i = \sqrt{n}\cdot \bar{X},$$ which follows that $$\bar{X}\sim \mathcal{N}\left(\frac{\mu\sqrt{n}}{\sqrt{n}}, \frac{\sigma^2}{n}\right) = \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)$$
+This is the conclusion of **Part (b)**.
+
+Now, we turn our focus onto $S^2$. Notice that $$\bar{X}\mathbf{1} = \begin{pmatrix}\bar{X} \\ \vdots \\ \bar{X}\end{pmatrix}$$ Let $$\mathbf{R} = \mathbf{X} - \bar{X}\mathbf{1} = \begin{pmatrix} X_1-\bar{X}\\ X_2 - \bar{X} \\ \vdots \\ X_n - \bar{X} \end{pmatrix}$$
+This follows $$S^2 = \frac{1}{n-1}\mathbf{R}^\top\mathbf{R} = S^2 = \frac{1}{n-1}\lVert \mathbf{R}\rVert^2$$
+Take a closer look, $\bar{X}\mathbf{1}$ is the projection of $\mathbf{X}$ onto $\mathrm{span}\{\mathbf{1}\}$. This gives $\bar{X}\mathbf{1} = Y_1a_1$. Also, since $\mathbf{Y} = \mathbf{AX}$, $\mathbf{X} = \mathbf{A}^\top\mathbf{Y}$, which follows $$\mathbf{X} = \sum_{j=1}^n Y_ja_j$$
+Thus, we can quantify $\mathbf{R}$ as $$\mathbf{R} = \mathbf{X} - \bar{X}\mathbf{1} = \sum_{j=2}^n Y_ja_j$$
+Since $\{a_j\}$ is an orthonormal basis, $$\lVert \mathbf{R} \rVert^2 = \left\lVert \sum_{j=2}^n Y_ja_j\right\rVert^2 = \sum_{j=2}^n Y_j^2$$
+Therefore, $\displaystyle (n-1)S^2 = \sum_{j=2}^n Y_j^2$, where $Y_j\sim \mathcal{N}(0,\sigma^2)$, $Y_j$ are independent. Let $$Z_j = \frac{Y_j}{\sigma}, \qquad j = 2, \dots, n$$ Notice that $Z_2, \dots, Z_n\overset{\text{iid}}{\sim}\mathcal{N}(0,1)$. We are able to write $$\frac{(n-1)S^2}{\sigma^2} = \sum_{j=2}^n Z_j^2\sim \chi^2_{n-1}$$This is the conclusion of **Part (c)**.
+
+The only piece missing is the independence of $\bar{X}$ and $S^2$. From our prior construction, $Y_1$ is independent of $(Y_2, \dots, Y_n)$ because $\mathbf{Y}$ has a diagonal covariance matrix. Recall that $\bar{X}$ depends only on $Y_1$ and $S^2$ depends only on $Y_2, \dots, Y_n$, so they are independent. This is the conclusion of **Part (a)**. 
+
+### 1.9.2 The Derived Distribution: Student's $t$-distribution
+
+Motivation: We know that if $X_1, \dots, X_n$ are a random sample from $\mathcal{N}(\mu, \sigma^2)$, then $$\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}\sim \mathcal{N}(0,1)$$ We turn to $$\frac{\bar{X} - \mu}{S/\sqrt{n}}$$ as a basis for inference about $\mu$ with the absence of $\sigma$. Notice, $$\frac{\bar{X} - \mu}{S/\sqrt{n}} = \frac{\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}}{\sqrt{\frac{S^2}{\sigma^2}}}$$
+The numerator follows $\mathcal{N}(0,1)$, but the denominator follows $\sqrt{\frac{\chi^2_{n-1}}{n-1}}$, and the two are independent. 
+
+**Def** Student's $t$-distribution
+Let $X_1, \dots, X_n$ be a random sample from a $\mathcal{N}(\mu, \sigma^2)$ distribution. The quantity $(\bar{X} - \mu)/(S/\sqrt{n})$ has *Student's $t$-distribution* with $n-1$ degrees of freedom. If a random variable $T\sim t_p$, it has pdf $$f_T(t) = \frac{\Gamma\left(\frac{p+1}{2}\right)}{\Gamma\left(\frac{p}{2}\right)}\frac{1}{(p\pi)^{1/2}}\frac{1}{(1+t^2/p)^{(p+1)/2}} \qquad (t\in \mathbb{R})$$
+Surya's lecture slides documented the change of variable process to find the pdf of $t$-distribution:
+
+**Example** Deriving the Student's $t$-distribution ($k$ degree of freedom)
+Starting from $$T = \frac{W}{\sqrt{V/k}},$$ where $W \sim \mathcal{N}(0,1)$, $V\sim\chi^2_k$, and $W, V$ are independent. This allows us to find their joint pdf, $$\begin{align*}
+f_{W,V}(w,v) &= f_W(w)\cdot f_V(v)\\
+&= \frac{1}{\sqrt{2\pi}}e^{-\frac{w^2}{2}}\cdot \frac{1}{\Gamma\left(\frac{k}{2}\right)2^\frac{k}{2}}v^{\frac{k}{2}-1}e^{-\frac{v}{2}}
+\end{align*}$$
+We want to isolate $$T = \frac{W}{\sqrt{U}}\qquad \text{where}\qquad U = \frac{V}{k}$$ then the inverse transformations will be $V = kU$ and $W = T\sqrt{U}$. We can now find the Jacobian, $$\mathbf{J} = \mathrm{det}\begin{pmatrix}
+\frac{\partial w}{\partial t} & \frac{\partial w}{\partial u} \\ \frac{\partial v}{\partial t} & \frac{\partial v}{\partial u}
+\end{pmatrix} = \mathrm{det}\begin{pmatrix}
+\sqrt{u} & \frac{t}{2\sqrt{u}} \\ 0 & k
+\end{pmatrix}$$ and $|\mathbf{J}| = k\sqrt{u}$. Then, put $v = ku$, $w =  t\sqrt{u}$ into the joint distribution pdf, $$\begin{align*}
+f_{T,U}(t,u) &= \left[\frac{1}{\sqrt{2\pi}}e^{-\frac{(t\sqrt{u})^2}{2}}\right]\left[\frac{1}{\Gamma\left(\frac{k}{2}\right)2^\frac{k}{2}}(ku)^{\frac{k}{2}-1}e^{-\frac{ku}{2}}\right](k\sqrt{u})\\
+&= C\cdot u^{\frac{k+1}{2}-1}e^{-\frac{u}{2}(k+t^2)} \qquad \left(C =\frac{k^\frac{k}{2}}{\sqrt{2\pi}\Gamma(k/2)2^{k/2}}\right)
+\end{align*}$$
+Marginal distribution pdf of $T$ is: $$\begin{align*}
+f_T(t) &= C\int_0^\infty u^{\frac{k+1}{2}-1}e^{-u\left(\frac{k+t^2}{2}\right)}\, du\\
+&= C\frac{\Gamma\left(\frac{k+1}{2}\right)}{\left(\frac{k+t^2}{2}\right)^\frac{k+1}{2}}\\
+&= \frac{\Gamma\left(\frac{k+1}{2}\right)}{\sqrt{k\pi}\Gamma\left(\frac{k}{2}\right)}\left(1+\frac{t^2}{k}\right)^{-\frac{k+1}{2}}
+\end{align*}$$
+
 
 
