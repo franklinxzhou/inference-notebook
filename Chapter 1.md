@@ -639,7 +639,43 @@ M(t) &= 1+ \sum_{k=1}^\infty \frac{\mathbb{E}[Y^k]}{k!}t^k \\
 \end{align*}$$
 This is the exact mgf of a $\mathrm{Bernoulli}(1/2)$ mgf, so $$\mathrm{Beta}\left(\frac{1}{n}, \frac{1}{n}\right)\Rightarrow \mathrm{Bernoulli}\left(\frac{1}{2}\right)$$
 **Thm** Central Limit Theorem (CLT)
+Let $X_1, X_2, \dots$, be a sequence of iid random variables \[whose mgfs exist in a neighborhood of 0\]. Let $\mathbb{E}(X_i) = \mu$ and $\mathbb{V}\mathrm{ar}(X_i) = \sigma^2>0$. (Both $\mu$ and $\sigma^2$ are finite since the mgf exists.) Define $\bar{X}_n = (1/n)\sum_{i=1}^n X_i$. Let $G(n)$ denote the cdf of $\sqrt{n}(\bar{X}_n - \mu)/\sigma^2$. Then, $\forall x\in \mathbb{R}$, $$\lim_{n\to\infty} G_n(x) = \int_{-\infty}^x\frac{1}{\sqrt{2\pi}}e^{-y^2/2}\,dy;$$ in other words, $\sqrt{n}(\bar{X}_n - \mu)/\sigma^2$ has a limiting standard normal distribution. 
 
+*Remark*: The part in $[\cdot]$ is not necessary. Surya's lecture slides and Casella & Berger's book both presented a mgf-based proof for the CLT. The goal of the proof is to show that the mgf of $\sqrt{n}(\bar{X}_n - \mu)/\sigma$ converges to $\exp(t^2/2)$. 
 
+*Proof*: Assume that the mgf is finite. We start from letting $$Y_i = \frac{X_i-\mu}{\sigma}.$$
+With $$\frac{\sqrt{n}(\bar{X}_n-\mu)}{\sigma} = \frac{1}{\sqrt{n}}\sum_{i=1}^n Y_i,$$ we can land onto $$M_{\sqrt{n}(\bar{X}_n-\mu)/\sigma}(t) = M_{\sum_{i=1}^n}\left(\frac{t}{\sqrt{n}}\right) = \left(M_Y\left(\frac{t}{\sqrt{n}}\right)\right)^n$$
+By Taylor expansion, notice that $M_Y^{(0)} = 1$ (the total probability), $M_Y^{(1)} = 0$ (the mean), $M_Y^{(2)} = 1$ (the variance). $$M_Y\left(\frac{t}{\sqrt{n}}\right) = 1 + \frac{(t/\sqrt{n})^2}{2!}+\sum_{k=3}^\infty M_Y^{(k)}(0)\frac{(t/\sqrt{n})^k}{k!}$$
+Notice that Taylor's theorem says, $$\lim_{n\to \infty}\frac{\sum_{k=3}^\infty M_Y^{(k)}(0)\frac{(t/\sqrt{n})^k}{k!}}{(t/\sqrt{n})^2} = 0$$
+$$\lim_{n\to\infty} n\sum_{k=3}^\infty M_Y^{(k)}(0)\frac{(t/\sqrt{n})^k}{k!} = 0$$ 
+Then, we can rewrite the mgf of $\sqrt{n}(\bar{X}_n-\mu)/\sigma$, $$\begin{align*}
+M_{\sqrt{n}(\bar{X}_n-\mu)/\sigma}(t) = \left(M_Y\left(\frac{t}{\sqrt{n}}\right)\right)^n &= \lim_{n\to \infty}\left[1+\frac{1}{n}\left(\frac{t^2}{2} + n\sum_{k=3}^\infty M_Y^{(k)}(0)\frac{(t/\sqrt{n})^k}{k!}\right)\right]\\
+&= \lim_{n\to\infty}\left[1+\frac{1}{n}\left(\frac{t^2}{2}+c\right)\right]\\
+&= \exp(t^2/2)
+\end{align*}$$
+Some justification of the last step: It is established that if $\lim_{n\to \infty} x_n = x$, then $\lim_{n\to\infty}(1+\frac{x_n}{n})^n = e^x$. 
 
+This proves $$\sqrt{n}(\bar{X}_n-\mu)/\sigma\Rightarrow \mathcal{N}(0,1)$$
+**Example** of using the CLT
+1. Given $X_i\overset{\text{iid}}{\sim} \mathrm{Bernoulli}(p)$, $p = 2/3$. $\mathbb{E}(X_i) = \frac{2}{3}$, $\mathbb{V}\mathrm{ar}(X_i) = \frac{2}{9}$. Then $\sqrt{n}(\bar{X}_n - \frac{2}{3}) \Rightarrow \mathcal{N}(0, \frac{2}{9})$ and $\bar{X}_n\overset{\text{approx}}{\sim}\mathcal{N}(\frac{2}{3}, \frac{2}{9n})$. 
+2. Given $X_i\overset{\text{iid}}{\sim} \mathrm{Poisson}(\lambda)$, $\lambda = 3$. $\mathbb{E}(X_i) = 3$, $\mathbb{V}\mathrm{ar}(X_i) = 3$. Then $\sqrt{n}(\bar{X}_n - 3) \Rightarrow \mathcal{N}(0, 3)$ and $\bar{X}_n\overset{\text{approx}}{\sim}\mathcal{N}(3, \frac{3}{n})$. 
+3. Given the same condition of #2, $\mathbb{E}(X_i^2) = 3 + 3^2 = 12$, $\mathbb{V}\mathrm{ar}(X_i^2) = \mathbb{E}(X^4_i) - (\mathbb{E}(X^2_i))^2 = 165$. Then $\sqrt{n}(\overline{X^2_n} - 12) \Rightarrow \mathcal{N}(0, 165)$ and $\overline{X_n^2}\overset{\text{approx}}{\sim}\mathcal{N}(12, \frac{165}{n})$. 
 
+### 1.9.4 Convergence of Transforms
+
+**Thm** Continuous Mapping Theorem
+Suppose $g: \mathbb{R}^d\to \mathbb{R}$ is continuous, then for random vectors $\mathbf{Y}, \mathbf{Y}_1, \mathbf{Y}_2, \dots\in \mathbb{R}^d$, if $\mathbf{Y}_n \overset{p}{\to}\mathbf{Y}$ then $g(\mathbf{Y}_n)\overset{p}{\to}g(\mathbf{Y})$; $\mathbf{Y}_n \Rightarrow \mathbf{Y}$ then $g(\mathbf{Y}_n)\Rightarrow g(\mathbf{Y})$.
+
+**Thm** Slutsky's Theorem
+If $X_n\Rightarrow X$ and $Y_n \overset{p}{\to} a$, where $a$ is a constant, then 
+(a) $Y_nX_n \Rightarrow aX$.
+(b) $X_n+Y_n \Rightarrow X + a$. 
+
+**Thm** The Delta Method
+*For random variables*: 
+Let $Y_n$ be a sequence of random variables that satisfies $\sqrt{n}(Y_n - \theta)\Rightarrow \mathcal{N}(0,\sigma^2)$. For a given function $g$ and a specific value of $\theta$, suppose that $g'(\theta)$ exists and is nonzero. Then $$\sqrt{n}[g(Y_n) - g(\theta)]\Rightarrow \mathcal{N}(0, \sigma^2[g'(\theta)]^2)$$
+*For random vectors*: 
+Let $\{\mathbf{Y}_n\}$ be a sequence of random vectors in $\mathbb{R}^d$. Suppose that for a fixed vector $\boldsymbol{\theta} \in \mathbb{R}^d$ and a covariance matrix $\boldsymbol{\Sigma} \in \mathbb{R}^{d \times d}$: $$\sqrt{n}(\mathbf{Y}_n - \boldsymbol{\theta}) \Rightarrow \mathcal{N}_d(\mathbf{0}, \boldsymbol{\Sigma})$$ Let $g: \mathbb{R}^d \to \mathbb{R}^k$ be a function that is differentiable at $\boldsymbol{\theta}$. Then, the random vector sequence $g(\mathbf{Y}_n)$ converges in distribution as follows:
+$$\sqrt{n}\Big( g(\mathbf{Y}_n) - g(\boldsymbol{\theta}) \Big) \xrightarrow{d} \mathcal{N}_k\left(\mathbf{0}, \nabla g(\boldsymbol{\theta}) \boldsymbol{\Sigma} \nabla g(\boldsymbol{\theta})^\top\right)$$
+
+*Remark*: What is $\nabla g(\boldsymbol{\theta})$? $$\nabla g(\boldsymbol{\theta}) = \begin{pmatrix} \frac{\partial g_1}{\partial y_1} & \dots & \frac{\partial g_1}{\partial y_d} \\ \vdots & \ddots & \vdots \\ \frac{\partial g_k}{\partial y_1} & \dots & \frac{\partial g_k}{\partial y_d} \end{pmatrix} \Bigg|_{\mathbf{y}=\boldsymbol{\theta}}$$
