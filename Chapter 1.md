@@ -1,5 +1,5 @@
 Probability Review
-*Note*: Surya likes using $p$ for pmf and pdf. I will use it in his exams, but stick to $f$ elsewhere.
+*Note*: Surya likes using $p$ for pmf and pdf. I have to use it in his exams, but stick to $f$ elsewhere.
 ## 1.1 Definitions
 ### 1.1.1 *Probability space*
 **Def** Sample space
@@ -592,6 +592,54 @@ f_T(t) &= C\int_0^\infty u^{\frac{k+1}{2}-1}e^{-u\left(\frac{k+t^2}{2}\right)}\,
 &= C\frac{\Gamma\left(\frac{k+1}{2}\right)}{\left(\frac{k+t^2}{2}\right)^\frac{k+1}{2}}\\
 &= \frac{\Gamma\left(\frac{k+1}{2}\right)}{\sqrt{k\pi}\Gamma\left(\frac{k}{2}\right)}\left(1+\frac{t^2}{k}\right)^{-\frac{k+1}{2}}
 \end{align*}$$
+### 1.9.3 Convergence Topics
+
+**Def** Convergence in Probability
+A sequence of random variables, $X_1, X_2, \dots$, converges in probability to a random variable $X$ if, $\forall \epsilon>0$, $$\lim_{n\to \infty} \mathbb{P}(|X_n - X|\ge \epsilon) = 0, \quad \text{or, equivalently,}\quad \lim_{n\to\infty}\mathbb{P}(|X_n - X|<\epsilon) = 1$$
+**Thm** WLLN, Weak Law of Large Numbers
+Let $X_1, X_2, \dots$ be iid random variables with $\mathbb{E}(X_i) = \mu$ and $\mathbb{V}\mathrm{ar}(X_i) = \sigma^2<\infty$. Define $\bar{X}_n = (1/n)\sum_{i=1}^n X_i$. Then, $\bar{X}_n\overset{p}{\to}\mu$. 
+*Proof*: Fix an arbitrary $\epsilon>0$, $$\begin{align*}
+\mathbb{P}(|\bar{X}_n - \mu|\ge \epsilon) &=\mathbb{P}((\bar{X}_n - \mu)^2\ge \epsilon^2)\\
+&\le \frac{\mathbb{E}[(\bar{X}_n - \mu)^2]}{\epsilon^2}\\
+&= \frac{\mathbb{V}\mathrm{ar}(\bar{X}_n)}{\epsilon^2}\\
+&= \frac{\sigma^2}{n\epsilon^2}
+\end{align*}$$
+As $n\to \infty$, $\mathbb{P}(|\bar{X}_n - \mu|\ge \epsilon)\to 0$. 
+
+*Remark*: There is a concept called *Almost Sure Convergence* and a corresponding *Strong Law of Large Numbers*. Also assuming finite variance, the definition of ASC and SLLN put the limit inside the $\mathbb{P}$ bracket. 
+
+**Def** Convergence in Distribution
+A sequence of random variables, $X_1, X_2, \dots$, converges in distribution to a random variable $X$ if $$\lim_{n\to \infty} F_{X_n}(x) = F_X(x)$$ at all points $x$ where $F_X(x)$ is continuous. 
+
+*Remark*: Convergence in probability is a *stronger* condition than convergence in distribution. The following two theorems (first one, CIP $\Rightarrow$ CID; second one, CID to a constant $\Rightarrow$ CIP) will illustrate this point.
+
+**Thm** CIP $\Rightarrow$ CID
+If the sequence of random variables, $X_1, X_2, \dots$, converges in probability to a random variable $X$, the sequence also converges in distribution to $X$. 
+
+**Thm** CID to a constant $\Leftrightarrow$ CIP
+The sequence of random variables, $X_1, X_2, \dots$, converges in probability to a constant $\mu$ if and only if the sequence also converges in distribution to $\mu$. 
+
+**Example** Beta-Bernoulli Convergence
+We want to determine the limiting distribution of a sequence of random variables $Y_n$ as $n\to \infty$, where $$Y_n\sim \mathrm{Beta}\left(\frac{1}{n}, \frac{1}{n}\right).$$
+Our game plan is using the *Method of Moments*: 
+1. Calculate the general $k$-th moment of $Y_n$;
+2. Find the limit of this moment as $n\to\infty$;
+3. Reconstruct the limiting mgf with Taylor expansion.
+
+A little bit of justification that this approach works: If the sequence of mgfs $M_n(t)$ converges pointwise to $M(t)$ for all $t$, then distribution-wise, $P_n\Rightarrow P$.
+
+For some $Y\sim \mathrm{Beta}(\alpha, \beta)$, the $k$-th moment is given by, $$\mathbb{E}[Y^k] = \frac{B(\alpha+k, \beta)}{B(\alpha, \beta)} = \frac{\Gamma(\alpha + k)\Gamma(\alpha + \beta)}{\Gamma(\alpha + \beta + k)\Gamma(\alpha)}$$
+This expression can be further simplified by $\Gamma(x+1) = x\Gamma(x)$. Therefore, $$\mathbb{E}[Y^k] = \prod_{j=0}^{k-1}\frac{\alpha+j}{\alpha+\beta+j} = \frac{\alpha}{\alpha+\beta}\times\frac{\alpha+1}{\alpha+\beta+1}\times \dots \times \frac{\alpha+k-1}{\alpha+\beta+k-1}$$
+Putting in $\alpha = 1/n$, $\beta = 1/n$, $$\mathbb{E}[Y_n^k] = \frac{1/n}{2/n}\times \frac{1/n+1}{2/n+1}\times \dots \times\frac{1/n + k-1}{2/n + k-1}$$
+As $n\to \infty$, the first term is $1/2$, but from the second term, every term goes to 1 as $1/n\to 0$ and $2/n\to 0$. Then, we can reconstruct the mgf by $$\begin{align*}
+M(t) &= 1+ \sum_{k=1}^\infty \frac{\mathbb{E}[Y^k]}{k!}t^k \\
+&= 1+\frac{1}{2}\sum_{k=1}^\infty \frac{t^k}{k!}\\
+&= 1+\frac{1}{2}(e^t-1)\\
+&= \frac{1}{2}+\frac{1}{2}e^t
+\end{align*}$$
+This is the exact mgf of a $\mathrm{Bernoulli}(1/2)$ mgf, so $$\mathrm{Beta}\left(\frac{1}{n}, \frac{1}{n}\right)\Rightarrow \mathrm{Bernoulli}\left(\frac{1}{2}\right)$$
+**Thm** Central Limit Theorem (CLT)
+
 
 
 
