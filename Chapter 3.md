@@ -54,10 +54,31 @@ It can be summarized by the table:
 
 *Remark*: C&B like to say "reject $H_0$" in lieu of "accept $H_1$", but I don't think this Fisherian speak is right in the context of N-P. 
 
-If we only concern one parameter $\theta$, suppose $R$ denotes the region to accept $H_1$ for a test; i.e., if $T(\mathbf{x})\in R$, we accept $H_1$. For $\theta\in \Theta_0$, the test will make a mistake if $T(\mathbf{x}) \in R$ with the probability of a Type I Error being $$\mathbb{P}_\theta(T(\mathbf{X})\in R);$$ for $\theta\in \Theta_1$, the test will make a mistake if $T(\mathbf{x})\in R^c$ with the probability of a Type II Error being $$\mathbb{P}_\theta(T(\mathbf{X})\in R^c).$$ This shows that the function $\mathbb{P}_\theta(T(\mathbf{X})\in R)$ contains all the information about the test that accepts $H_1$ when $T(\mathbf{x})\in R$. $$\mathbb{P}_\theta(\mathbf{X}\in R) = \begin{cases}
+If we only concern one parameter $\theta$, suppose $R$ denotes the region to accept $H_1$ for a test; i.e., if $T(\mathbf{x})\in R$, we accept $H_1$. For $\theta\in \Theta_0$, the test will make a mistake if $T(\mathbf{x}) \in R$ with the probability of a Type I Error being $$\mathbb{P}_\theta(T(\mathbf{X})\in R);$$ for $\theta\in \Theta_1$, the test will make a mistake if $T(\mathbf{x})\in R^c$ with the probability of a Type II Error being $$\mathbb{P}_\theta(T(\mathbf{X})\in R^c).$$ This shows that the function $\mathbb{P}_\theta(T(\mathbf{X})\in R)$ contains all the information about the test that accepts $H_1$ when $T(\mathbf{x})\in R$. $$\mathbb{P}_\theta(T(\mathbf{X})\in R) = \begin{cases}
 \text{probability of a Type I Error} & \text{if }\theta\in \Theta_0\\
 1-\text{probability of a Type II Error} & \text{if }\theta\in \Theta_1
 \end{cases}$$
+*Remark*: The term $\mathbb{P}_\theta$ is a family of probability laws indexed by $\theta$. For example, when we calculate the probability of Type I Error, we switch the knob to $\theta\in \Theta_0$; when we calculate the probability of Type II Error, we switch the knob to $\theta\in \Theta_1$. 
+
+**Def** Probability of Type II Error ($\beta$)
+ATTENTION: *This definition is following Surya's notation, where the power function is $1-\beta$, instead of the standard notation, where the power function is $\beta$.*
+
+The *probability* of a hypothesis test accepting $H_0$ when $T(\mathbf{x})\in R^c$ is the function of $\theta$ defined by $\beta(\theta) = \mathbb{P}_\theta(T(\mathbf{X})\in R^c)$. This means the power function $$\mathbb{P}_\theta(T(\mathbf{X})\in R) = 1-\beta(\theta)$$
+**Def** Size $\alpha$ vs. Level $\alpha$
+*Remark*: This distinction is very important wrt to *composite* $H_0$'s. However, for a simple $\mathscr{P}_0$, the size is the level. See the next *Remark*.
+
+For $0\le \alpha \le 1$, a test with power function $\mathbb{P}_\theta(T(\mathbf{X})\in R)$ is a size $\alpha$ test if $$\sup_{\theta\in \Theta_0}\mathbb{P}_\theta(T(\mathbf{X})\in R) = \alpha$$
+For $0\le \alpha \le 1$, a test with power function $\mathbb{P}_\theta(T(\mathbf{X})\in R)$ is a level $\alpha$ test if $$\sup_{\theta\in \Theta_0}\mathbb{P}_\theta(T(\mathbf{X})\in R)\le \alpha$$
+*Remark*: In Surya's slides, the most simple hypotheses is given: $$\mathscr{P}_0 = \{P_0\} \qquad \text{and} \qquad \mathscr{P}_1 = \{P_1\}$$
+The $\alpha$ is defined as $$\alpha = P_0(T(\mathbf{X})\in R)$$ (Under probability law $P_0$, the probability of $T(\mathbf{X})$ is in the region where the test accepts $H_1$) 
+
+The $\beta$ is defined as $$\beta = P_1(T(\mathbf{X})\in R^c)$$ (Under probability law $P_1$, the probability of $T(\mathbf{X})$ is in the region where the test accepts $H_0$)
+
+**Example** Opinion Poll, revisited
+Suppose we test $$H_0: X\sim\mathrm{Bin}(500, 0.5)$$ versus $$H_1: X\sim \mathrm{Bin}(500, 0.55).$$ Then, set $R = \{269 \le x \le 500: x\in \mathbb{Z}\}$.
+
+Under $P_0$ ($\mathrm{Bin}(500, 0.5)$), $$\alpha = P_0(X\ge 269) = \sum_{k=269}^{500}\begin{pmatrix} 500 \\ k \end{pmatrix}(0.5)^k(1-0.5)^{500-k} = 0.048945$$
+Under $P_1$ ($\mathrm{Bin}(500, 0.55)$), $$\beta =P_1(X< 269) = \sum_{k=1}^{268}\begin{pmatrix} 500 \\ k \end{pmatrix}(0.55)^k(1-0.55)^{500-k} = 0.27920$$
 
 **Example** Normal Distribution with Scaled Means, revisited
 Suppose $Y_1, Y_2, \dots$ are independently distributed as $Y_j\sim (\theta x_j, 1)$, where $x_j = 1/\sqrt{j}$, and $\theta\in \mathbb{R}$. Suppose $$T_n = \frac{1}{n}\sum_{i=1}^n \frac{Y_i}{x_i},$$ and we want to identify a test rule based on this statistic for testing $$H_0: \theta\le 0$$ versus $$H_1:\theta>0$$
