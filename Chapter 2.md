@@ -48,6 +48,7 @@ Let $f(\mathbf{x}\mid \theta)$ denote the joint pdf or pmf of the sample $\mathb
 In C&B $\S$ 6.3, **the Likelihood Principle** is introduced.
 If $\mathbf{x}$ and $\mathbf{y}$ are two sample points s.t. $\mathcal{L}(\theta\mid \mathbf{x})$ is proportional to $\mathcal{L}(\theta\mid \mathbf{y})$, that is, $\exists$ a constant $C(\mathbf{x}, \mathbf{y})$ s.t. $$\mathcal{L}(\theta\mid \mathbf{x}) = C(\mathbf{x}, \mathbf{y})\mathcal{L}(\theta\mid \mathbf{y})\qquad (\forall \theta)$$ then the conclusions drawn from $\mathbf{x}$ and $\mathbf{y}$ should be identical. 
 
+See C&B $\S$ 6.3.2, for *Formal Likelihood Principle*, *Formal Sufficiency Principle*, and **Conditionality Principle** - in plain words, if one of two exp. is randomly chosen and the chosen exp. is done, yielding $\mathbf{x}$, the inference about $\theta$ should be made based only on the exp. performed. Also, *Birnbaum's Theorem*: The Formal Likelihood Principle $\Leftrightarrow$ The Formal Sufficiency Principle + The Conditionality Principle. 
 ## 2.4 Sufficiency
 C&B Reference: $\S$ 6.2 The Sufficiency Principle
 **Def** Sufficient Statistic
@@ -125,6 +126,7 @@ This follows that the ratio of the two pdfs is $$\frac{f(\mathbf{x}\mid \mu)}{q(
 In general, what is **the Sufficient Principle**? 
 If $T(\mathbf{X})$ is a sufficient statistic for $\theta$, then any inference about $\theta$ should depend on the sample $\mathbf{X}$ only through the value $T(\mathbf{X})$. That is if $\mathbf{x}$ and $\mathbf{y}$ are two sample points s.t. $T(\mathbf{x}) = T(\mathbf{y})$, then the inference about $\theta$ should be the same whether $\mathbf{X} = \mathbf{x}$ or $\mathbf{X} = \mathbf{y}$ is observed. 
 
+(If time permits, to be added: Finding Normal sufficient statistic for $\sigma^2, \mu$ simultaneously unknown; extra book problems about sufficiency)
 
 
 
