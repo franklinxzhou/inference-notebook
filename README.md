@@ -70,7 +70,7 @@ Chapter 10 (asymptotic evaluations)
 
 ## Casella & Berger Reference
 Chapter 7 (point estimation)
- - Cramer-Rao inequality,  under methods of evaluating estimators, $\S$ 5.3
+ - Cramér-Rao inequality,  under methods of evaluating estimators, $\S$ 5.3
  
 Chapter 8 (hypothesis testing)
  - UMP/most powerful test ($\S$ 8.3.2), $\S$ 5.1

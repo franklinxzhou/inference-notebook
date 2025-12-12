@@ -14,4 +14,51 @@ The researcher collected a sample of $n=500$.
 *Calculate $p$-value*: For example, if $x_\text{obs} = 270$, $$p = \max_{\phi\le 0.5}\mathbb{P}(X\ge 270\mid \phi) = \mathbb{P}(X\ge 270\mid \phi = 0.5) = 0.04$$
 *Remark*: Fisher recommended reporting the exact $p$-value instead of the "p<0.05", because, for example, $p = 0.04$ implies either $H_0$ is *false* or *a rare event (with a chance of 4%) has happened*. The statement provides no information about which one is more likely. 
 
+*Remark*: Classical significance testing uses *deductive logic* (reasoning from a hypothesis to expected data), which prevents us from making direct probability statements about the hypothesis itself (which would require *inductive logic*).
+
+**Example** COVID Test
+Suppose you take a COVID test with a 3% false positive rate and the result is positive. 
+*The Deductive Conclusion*: Either I have COVID or it is a rare event, with only 3% chance, has happened.
+*The Inductive Conclusion* (which is fallacious): Either I have COVID (97% chance) or I don't have COVID (only 3% chance). 
+
+Why the inductive conclusion is fallacious? It ignores the baseline prevalence of the disease (the prior). To make a valid inductive conclusion, one must use *Bayesian framing*: Suppose the prior is *33% of people exhibiting symptoms actually have COVID*, and the false negative rate is 40%. $$\begin{align*}
+\mathbb{P}(\text{COVID}\mid +) &= \frac{\mathbb{P}(\text{COVID})\mathbb{P}(+\mid \text{COVID})}{\mathbb{P}(\text{COVID})\mathbb{P}(+\mid \text{COVID}) + \mathbb{P}(\neg\text{COVID})\mathbb{P}(+\mid \neg\text{COVID})}\\
+&= \frac{0.33\times 0.6}{0.33\times 0.6 + 0.67\times 0.03}\\
+&= 0.91
+\end{align*}$$
+The correct inductive conclusion: Either I have COVID (91% chance) or I do not have COVID (only 9% chance). 
+
 ## 3.2 Neyman-Pearson Frequentism
+The fundamental shift from Fisher to Neyman-Pearson is moving from "inductive reasoning" (trying to learn what is true about the specific hypothesis) to "inductive behavior" (establishing a rule for taking action).
+
+**Def** Testing Rule
+Under N-P frequentism, hypothesis testing is a comparative assessment of $$H_0: P\in \mathscr{P}_0$$ and $$H_1: P\in \mathscr{P}_1$$ where $\mathscr{P}_0$ and $\mathscr{P}_1$ form a partition of the model space $\mathscr{P}$. 
+
+A *testing rule* is a map $\delta: \mathscr{S}\to \{\text{accept }H_0, \text{accept } H_1\}$, according to which we take actions given an observation $X=x$. 
+
+Connecting to Fisherian approach, if $T = T(\mathbf{X})$ is a statistic that measures evidence against $H_0$ in data $\mathbf{X}$, we could fix a critical value $c$ as the cutoff (i.e., $T\ge c$ implies significant evidence against $H_0$) and create the $\delta$: $$\delta(\mathbf{x}) = \begin{cases}
+\text{accept }H_1 & \text{if }T(\mathbf{x})\ge c\\
+\text{accept }H_0 & \text{if }T(\mathbf{x})< c
+\end{cases}$$
+
+**Def** Type I Error, Type II Error
+If $P\in \mathscr{P_0}$ but the hypothesis test incorrectly decides to reject $H_0$, then this test has made a *Type I Error*. If, on the other hand, $P\in \mathscr{P}_1$ but the test decides to accept $H_0$, a *Type II Error* has been made.
+
+It can be summarized by the table:
+
+|                | Accept $H_0$     | Accept $H_1$     |
+|----------------|------------------|------------------|
+| Truth is $H_0$ | Correct decision | Type I Error     |
+| Truth is $H_1$ | Type II Error    | Correct decision |
+*Remark*: In C&B, the authors like to use $\theta \in \Theta_0$ to denote $H_0$, where $\theta$ is the parameter of interest and $\Theta_0$ is the subset of a parameter space, but Surya likes to use $P\in \mathscr{P}_0$ to denote $H_0$, where $P$ is the model of interest and $\mathscr{P}_0$ is the subset of a model space. Both notations are interchangeable when we only concern one parameter, but Surya's notation is more generalized.
+
+*Remark*: C&B like to say "reject $H_0$" in lieu of "accept $H_1$", but I don't think this Fisherian speak is right in the context of N-P. 
+
+If we only concern one parameter $\theta$, suppose $R$ denotes the region to accept $H_1$ for a test; i.e., if $T(\mathbf{x})\in R$, we accept $H_1$. For $\theta\in \Theta_0$, the test will make a mistake if $T(\mathbf{x}) \in R$ with the probability of a Type I Error being $$\mathbb{P}_\theta(T(\mathbf{X})\in R);$$ for $\theta\in \Theta_1$, the test will make a mistake if $T(\mathbf{x})\in R^c$ with the probability of a Type II Error being $$\mathbb{P}_\theta(T(\mathbf{X})\in R^c).$$ This shows that the function $\mathbb{P}_\theta(T(\mathbf{X})\in R)$ contains all the information about the test that accepts $H_1$ when $T(\mathbf{x})\in R$. $$\mathbb{P}_\theta(\mathbf{X}\in R) = \begin{cases}
+\text{probability of a Type I Error} & \text{if }\theta\in \Theta_0\\
+1-\text{probability of a Type II Error} & \text{if }\theta\in \Theta_1
+\end{cases}$$
+
+**Example** Normal Distribution with Scaled Means, revisited
+Suppose $Y_1, Y_2, \dots$ are independently distributed as $Y_j\sim (\theta x_j, 1)$, where $x_j = 1/\sqrt{j}$, and $\theta\in \mathbb{R}$. Suppose $$T_n = \frac{1}{n}\sum_{i=1}^n \frac{Y_i}{x_i},$$ and we want to identify a test rule based on this statistic for testing $$H_0: \theta\le 0$$ versus $$H_1:\theta>0$$
+(to be added after completing the definitions of $\alpha$ and $\beta$)
