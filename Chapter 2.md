@@ -42,6 +42,11 @@ Even though the regression part appears to use finitely many parameters ($\beta_
 
 ## 2.3 Likelihood Function
 C&B Reference: $\S$ 6.3 The Likelihood Function Principle
+**Def** The Likelihood Function
+Let $f(\mathbf{x}\mid \theta)$ denote the joint pdf or pmf of the sample $\mathbf{X} = (X_1,\dots, X_n)$. Then, given that $\mathbf{X} = \mathbf{x}$ is observed, the function of $\theta$ defined by $$\mathcal{L}(\theta\mid \mathbf{x}) = f(\mathbf{x}\mid \theta)$$ is called the *Likelihood function*. 
+
+In C&B $\S$ 6.3, **the Likelihood Principle** is introduced.
+If $\mathbf{x}$ and $\mathbf{y}$ are two sample points s.t. $\mathcal{L}(\theta\mid \mathbf{x})$ is proportional to $\mathcal{L}(\theta\mid \mathbf{y})$, that is, $\exists$ a constant $C(\mathbf{x}, \mathbf{y})$ s.t. $$\mathcal{L}(\theta\mid \mathbf{x}) = C(\mathbf{x}, \mathbf{y})\mathcal{L}(\theta\mid \mathbf{y})\qquad (\forall \theta)$$ then the conclusions drawn from $\mathbf{x}$ and $\mathbf{y}$ should be identical. 
 
 ## 2.4 Sufficiency
 C&B Reference: $\S$ 6.2 The Sufficiency Principle
@@ -73,9 +78,53 @@ Observe that since $g(T(\mathbf{x})\mid \theta) = \mathbb{P}_\theta(T(\mathbf{X}
 
 *Remark*: The joint pdf or pmf here, $f(\mathbf{x}\mid \theta)$, and the likelihood function are interchangeable. Joint pdf/pmf is used here because in C&B $\S$ 6.2, likelihood function has yet to be formally defined.
 
-**Example** 
-Suppose $X_1, \dots, X_n\sim \mathrm{Exponential}(\lambda)$ with $f(x\mid \lambda) = \lambda e^{-\lambda x}$. Let $T(\mathbf{X}) = \overline{X}$. Then, the likelihood function is given by $$L(\lambda; \mathbf{x}) = \prod_{i=1}^n \lambda e^{-\lambda x_i} = \lambda^n e^{-\lambda \sum x_i} = \lambda^n e^{-\lambda (n\overline{x})}$$
+**Example** i.i.d. Exponential Distribution
+Suppose $X_1, \dots, X_n\overset{\text{iid}}{\sim} \mathrm{Exponential}(\lambda)$ with $f(x\mid \lambda) = \lambda e^{-\lambda x}$. Let $T(\mathbf{X}) = \overline{X}$. Then, the likelihood function is given by $$\mathcal{L}(\lambda; \mathbf{x}) = \prod_{i=1}^n \lambda e^{-\lambda x_i} = \lambda^n e^{-\lambda \sum x_i} = \lambda^n e^{-\lambda (n\overline{x})}$$
 Satisfying Condition II (Factorization Theorem), we notice that $g(T(\mathbf{x})\mid \theta) = \lambda^n e^{-\lambda (n\overline{x})}$ and $h(\mathbf{x}) = 1$. 
+
+**Example** Order Statistic of a Uniform Distribution
+Suppose $X_1, \dots, X_n\overset{\text{iid}}{\sim} \mathrm{Unif}(0,\theta)$, let $T(\mathbf{X}) = X_{(n)} = \max(X_1,\dots, X_n)$. A single observation has the density of $$f(x_i\mid \theta) = \frac{1}{\theta}\mathbb{I}_{0\le x\le \theta}$$ which follows that the joint likelihood is $$\mathcal{L}(\theta; \mathbf{x}) = \frac{1}{\theta^n}\prod_{i=1}^n\mathbb{I}_{0\le x_i\le \theta} = \frac{1}{\theta^n}\mathbb{I}_{0\le x_{(n)}\le \theta}.$$ Notice that if $x_{(n)}\le \theta$, then all of $x_i\le \theta$. We notice that this likelihood only depends on $x_{(n)}$. By Condition II, another sufficient statistic.
+
+**Example** The Discrete Mixture
+Consider the statistical model $X_1, \dots, X_n\overset{\text{iid}}{\sim} f(x\mid \theta)$, $0<\theta<1$, where $$f(x\mid\theta) = \begin{cases} \frac{1-\theta}{2} & \text{if }x=-1,\\ \theta & \text{if }x=0, \\ \frac{1-\theta}{2} & \text{if }x=1, \\ 0 & \text{otherwise.}\end{cases}$$
+We discuss if the following three statistics are sufficient: 
+(a) $T_1(\mathbf{X}) = X_1 + \dots + X_n$,
+**(b)** $T_2(\mathbf{X}) = |X_1| + \dots + |X_n|$, 
+**(c)** $T_3(\mathbf{X})$: the number of zeroes in $X_i$. 
+
+Inspecting the pmf, there are only three possible values, -1, 0, 1. We can write the joint likelihood as $$\mathcal{L}(\theta; \mathbf{x}) = \theta^{\mathbb{I}_{x=0}}\left(\frac{1-\theta}{2}\right)^{n-\mathbb{I}_{x=0}} = \theta^{T_3(\mathbf{X})}\left(\frac{1-\theta}{2}\right)^{n-T_3(\mathbf{X})}$$
+By Condition II, $T_3$ is the sufficient statistic. 
+
+Also, notice that $n-T_3 = T_2$ because $|x_i| = 1$ if $x_i = \pm 1$ and $|x_i| = 0$ if $x_i = 0$. The joint likelihood is then $$\mathcal{L}(\theta; \mathbf{x}) = \theta^{n-T_2(\mathbf{X})}\left(\frac{1-\theta}{2}\right)^{T_2(\mathbf{X})}$$
+**Example** Normal Distribution with Scaled Means
+Suppose $Y_1, Y_2, \dots$ are independently distributed as $Y_j\sim (\theta x_j, 1)$, where $x_j = 1/\sqrt{j}$, and $\theta\in \mathbb{R}$. Consider that the density of a single observation is $$f(y_i\mid \theta) = \frac{1}{\sqrt{2\pi}} \exp\left\{-\frac{1}{2}\left(y_j-\frac{\theta}{\sqrt{j}}\right)^2\right\}$$ This follows that the joint likelihood is $$\begin{align*}
+\mathcal{L}(\theta; \mathbf{y}) &\propto \prod_{j=1}^n\exp\left\{-\frac{1}{2}\left(y_j-\frac{\theta}{\sqrt{j}}\right)^2\right\} \\
+& = \exp\left\{-\frac{1}{2}\sum_{j=1}^n\left(y_j-\frac{\theta}{\sqrt{j}}\right)^2\right\}\\
+& = \exp\left\{-\frac{1}{2}\sum_{j=1}^n\left(y_j^2-\frac{2\theta}{\sqrt{j}}y_j + \frac{\theta^2}{j}\right)\right\}\\
+&= \exp\left\{-\frac{1}{2}\sum_{j=1}^n y_j^2\right\}\exp\left\{\frac{1}{2}\sum_{j=1}^n\left(\frac{2\theta}{\sqrt{j}}y_j - \frac{\theta^2}{j}\right)\right\}\\
+&= \underbrace{\exp\left\{-\frac{1}{2}\sum_{j=1}^n y_j^2\right\}}_{h(\mathbf{y})}\underbrace{\exp\left\{\theta\sum_{j=1}^n\frac{y_j}{\sqrt{j}} - \frac{1}{2}\sum_{j=1}^n\frac{\theta^2}{j}\right\}}_{g(T(\mathbf{y})\mid \theta)}
+\end{align*}$$
+As labeled above, we have factorized the joint likelihood and identified $$T(\mathbf{y}) = \sum_{j=1}^n \frac{y_j}{\sqrt{j}}$$ as the sufficient statistic for $\theta$. 
+
+**Def** Minimal Sufficient Statistic
+A sufficient statistic $T(\mathbf{X})$ is called a *minimal sufficient statistic* if, for any other sufficient statistic $T'(\mathbf{X})$, $T(\mathbf{X})$ is a function of $T'(\mathbf{X})$. 
+
+*Remark*: C&B $\S$ 6.2 moves on from this point to introduce a couple of related definitions and theorems related to sufficient statistic, but I think they are not in this course's scope anymore. Also, we have introduced a couple of sufficient statistic identified from the Condition II, here is one identifiable the Condition I. 
+
+**Example** Normal Sufficient Statistic (for $\mu$)
+Let $X_1, \dots, X_n\overset{\text{iid}}{\sim}\mathcal{N}(\mu, \sigma^2)$, where $\sigma^2$ is known. We want $T(\mathbf{X}) = \overline{X}$ to be a sufficient statistic for $\mu$. We need to show that the ratio of the pdfs of $\mathbf{X}$ and $T(\mathbf{X})$ is independent of $\mu$. Then, we should bear in mind that $\overline{X}\sim \mathcal{N}(\mu, \sigma^2/n)$. The pdf of $\overline{X}$ is $$q(T(\mathbf{x})\mid \mu) = \frac{\sqrt{n}}{\sigma\sqrt{2\pi}} \exp\left\{-\frac{n(\bar{x}-\mu)^2}{2\sigma^2}\right\}$$
+The joint pdf of $\mathbf{X}$ is $$\begin{align*}
+f(\mathbf{x}\mid \mu) &= \prod_{i=1}^n\frac{1}{\sigma\sqrt{2\pi}} \exp\left\{-\frac{(x_i-\mu)^2}{2\sigma^2}\right\}\\
+&= \frac{1}{\sigma\sqrt{2\pi}}\exp\left\{-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}\right\}\\
+&= \frac{1}{\sigma\sqrt{2\pi}}\exp\left\{-\sum_{i=1}^n\frac{(x_i-\bar{x} + \bar{x}-\mu)^2}{2\sigma^2}\right\}\\
+&= \frac{1}{\sigma\sqrt{2\pi}}\exp\left\{-\frac{\sum_{i=1}^n(x_i-\bar{x})^2 + n(\bar{x}-\mu)^2}{2\sigma^2}\right\}\\
+&= \left(\frac{\sqrt{n}}{\sigma\sqrt{2\pi}} \exp\left\{-\frac{n(\bar{x}-\mu)^2}{2\sigma^2}\right\}\right)\frac{1}{\sqrt{n}}\exp\left\{ - \frac{\sum_{i=1}^n (x_i - \bar{x})^2}{2\sigma^2}\right\}
+\end{align*}$$
+This follows that the ratio of the two pdfs is $$\frac{f(\mathbf{x}\mid \mu)}{q(T(\mathbf{x})\mid \mu)} = \frac{1}{\sqrt{n}}\exp\left\{ - \frac{\sum_{i=1}^n (x_i - \bar{x})^2}{2\sigma^2}\right\},$$ which is independent of $\mu$. 
+
+In general, what is **the Sufficient Principle**? 
+If $T(\mathbf{X})$ is a sufficient statistic for $\theta$, then any inference about $\theta$ should depend on the sample $\mathbf{X}$ only through the value $T(\mathbf{X})$. That is if $\mathbf{x}$ and $\mathbf{y}$ are two sample points s.t. $T(\mathbf{x}) = T(\mathbf{y})$, then the inference about $\theta$ should be the same whether $\mathbf{X} = \mathbf{x}$ or $\mathbf{X} = \mathbf{y}$ is observed. 
+
 
 
 
