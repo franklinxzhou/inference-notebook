@@ -78,8 +78,76 @@ The $\beta$ is defined as $$\beta = P_1(T(\mathbf{X})\in R^c)$$ (Under probabili
 Suppose we test $$H_0: X\sim\mathrm{Bin}(500, 0.5)$$ versus $$H_1: X\sim \mathrm{Bin}(500, 0.55).$$ Then, set $R = \{269 \le x \le 500: x\in \mathbb{Z}\}$.
 
 Under $P_0$ ($\mathrm{Bin}(500, 0.5)$), $$\alpha = P_0(X\ge 269) = \sum_{k=269}^{500}\begin{pmatrix} 500 \\ k \end{pmatrix}(0.5)^k(1-0.5)^{500-k} = 0.048945$$
-Under $P_1$ ($\mathrm{Bin}(500, 0.55)$), $$\beta =P_1(X< 269) = \sum_{k=1}^{268}\begin{pmatrix} 500 \\ k \end{pmatrix}(0.55)^k(1-0.55)^{500-k} = 0.27920$$
+Under $P_1$ ($\mathrm{Bin}(500, 0.55)$), $$\beta = P_1(X< 269) = \sum_{k=1}^{268}\begin{pmatrix} 500 \\ k \end{pmatrix}(0.55)^k(1-0.55)^{500-k} = 0.27920$$
+**Example** Fixed $\alpha$ Level Test: Metal Plates
+An engineer manages a machine making metal plates for medical devices. The target thickness is 2mm. Let the mean plate thickness be $\mu$. Testing $$H_0: \mu = 2$$ versus $$H_1: \mu>2$$
+We are aware that the observations $X_i\sim\mathcal{N}(\mu, \sigma^2)$ where $\sigma = 0.5$. Then, $T(\mathbf{X}) = \overline{X}\sim \mathcal{N}(\mu, \sigma^2/n)$. We set the *level* $\alpha = 0.01$, and set the Type II Probability $\beta = 0.01$. We aim to find the critical value $c$ and the smallest sample size $n$ that is sufficient.
+
+To Control Type I Error ($\alpha$), when $\mu = 2$, $$\mathbb{P}_{\mu=2}(\overline{X}>c) = 0.01$$ $$\mathbb{P}\left(Z > \frac{c - 2}{0.5/\sqrt{n}}\right) = 0.01$$ $$c = 2+ \Phi^{-1}(1-0.01)\frac{0.5}{\sqrt{n}} = 2+2.33\cdot\frac{0.5}{\sqrt{n}}$$
+To Control Type II Error ($\beta$), when $\mu = 3$, $\mathbb{P}(\bar{X} \le c)$ attains its maximum value. $$\mathbb{P}_{\mu=3}(\overline{X}\le c) = 0.01$$ $$\mathbb{P}\left(Z \le \frac{c - 3}{0.5/\sqrt{n}}\right) = 0.01$$ $$c = 3+\Phi^{-1}(0.01)\frac{0.5}{\sqrt{n}} = 3-2.33\cdot \frac{0.5}{\sqrt{n}}$$
+Equating the two $c$ obtained, $$2+2.33\cdot\frac{0.5}{\sqrt{n}} = 3-2.33\cdot \frac{0.5}{\sqrt{n}},$$ we solve for $n = 5.4289$. We choose the smallest integer above it, $n=6$. The resulting $c = 2.52$ can effectively separate the two hypotheses with less than 1% probability in both Type I and Type II errors. 
 
 **Example** Normal Distribution with Scaled Means, revisited
-Suppose $Y_1, Y_2, \dots$ are independently distributed as $Y_j\sim (\theta x_j, 1)$, where $x_j = 1/\sqrt{j}$, and $\theta\in \mathbb{R}$. Suppose $$T_n = \frac{1}{n}\sum_{i=1}^n \frac{Y_i}{x_i},$$ and we want to identify a test rule based on this statistic for testing $$H_0: \theta\le 0$$ versus $$H_1:\theta>0$$
-(to be added after completing the definitions of $\alpha$ and $\beta$)
+Suppose $Y_1, Y_2, \dots$ are independently distributed as $Y_j\sim (\theta x_j, 1)$, where $x_j = 1/\sqrt{j}$, and $\theta\in \mathbb{R}$. Suppose $$T_n = \frac{1}{n}\sum_{i=1}^n \frac{Y_i}{x_i},$$ and we want to identify a test rule based on this statistic for testing $$H_0: \theta\le 0$$ versus $$H_1:\theta>0$$ at $\alpha = 1\%$. 
+
+We need to determine the distribution of $T_n$ first. Since each $Y_j\overset{\text{ind}}{\sim}\mathcal{N}(\theta x_j,1)$, $$\begin{align*}
+\mathbb{E}(T_n) &= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\sqrt{j} Y_j\right)\\
+&= \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\sqrt{j}Y_j\right)
+\end{align*}$$
+Since $\mathbb{E}(Y_j) = \theta x_j = \theta/\sqrt{j}$, $\mathbb{E}\left(\sqrt{j}Y_j\right) = \theta$. $$\begin{align*}
+\mathbb{E}(T_n) &= \frac{1}{n}\sum_{i=1}^n \theta\\
+&= \theta
+\end{align*}$$
+$$\begin{align*}
+\mathbb{V}\mathrm{ar}(T_n) &= \mathbb{V}\mathrm{ar}\left(\frac{1}{n}\sum_{i=1}^n\sqrt{j} Y_j\right)\\
+&= \frac{1}{n^2}\sum_{i=1}^n j\mathbb{V}\mathrm{ar}(Y_j)\\
+&= \frac{1}{n^2}\sum_{i=1}^n j\\
+&= \frac{1}{n^2}\frac{n(n+1)}{2}\\
+&= \frac{n+1}{2n}
+\end{align*}$$
+Therefore, $$T_n\sim\mathcal{N}\left(\theta, \frac{n+1}{2n}\right)$$
+The maximized Type I Error occurs at $\theta=0$. $$\mathbb{P}_{\theta=0}(T_n\ge c) = 0.01$$ $$\mathbb{P}\left(Z > \frac{c}{\sqrt{\frac{n+1}{2n}}}\right)=0.01$$
+Solve for $c$, the critical value is $$c = \sqrt{\frac{n+1}{2n}}\Phi^{-1}(0.99)$$
+
+### 3.2.1 Intersection of N-P Frequentism and Fisher's Significance Testing
+For a null hypothesis $P\in \mathscr{P}_0$ and a statistic $T(\mathbf{X})$ where larger values indicate greater evidence against the null, the $p$-value is defined as a function of data $\mathbf{X}$. $$p(\mathbf{X}) = \sup_{P \in \mathcal{P}_0} \mathbb{P}_P(T(\mathbf{X}) \ge t)$$
+Assume that $T(\mathbf{X})$ has a continuous distribution under a simple null hypothesis $H_0$, we can show that $p(\mathbf{X})\sim \mathrm{Unif}(0,1)$. Notice that $p(\mathbf{X}) = 1-\mathbb{P}_P(T(\mathbf{X})\le t)$ and $\mathbb{P}_P(T(\mathbf{X})\le t)$ is a CDF of some distribution and therefore follows $\mathrm{Unif}(0,1)$. This follows that $p(\mathbf{X}) \sim \mathrm{Unif}(0,1)$. 
+
+Next, we want to show that the Fisherian notion of "reject $H_0$ if $p(\mathbf{x})<\alpha$" (i.e. the rule of $\{\mathbf{x} : p(\mathbf{x}) \le \alpha\}$) is equivalent to the N-P test with a pre-fixed level $\alpha$ defined by the rejection region $\{\mathbf{x} : T(\mathbf{x}) \ge c_\alpha\}$. Notice that in a standard Neyman-Pearson test, the critical value $c_\alpha$ is defined as $$\mathbb{P}_{H_0} (T(\mathbf{X})\ge c_\alpha) = \alpha$$
+In a Fisherian significance test, the $p$-value $p(\mathbf{x})$ is defined as $$p(\mathbf{x})= P_{H_0}(T(\mathbf{X}) \ge T(\mathbf{x}))$$ (lit., assuming $H_0$, the probability of observing some data $\mathbf{X}$ more extreme than $\mathbf{x}$ wrt the statistic $T$. )
+
+We want $p(\mathbf{x}) \le \alpha \Leftrightarrow T(\mathbf{x}) \ge c_\alpha$. Suppose $p(\mathbf{x})\le \alpha$, $$P_{H_0}(T(\mathbf{X}) \ge T(\mathbf{x}))\le \alpha$$
+This follows $$P_{H_0}(T(\mathbf{X}) \ge T(\mathbf{x}))\le \mathbb{P}_{H_0} (T(\mathbf{X})\ge c_\alpha)$$
+Because probability is monotonic (a smaller tail probability implies a larger cutoff value), we can invert this relationship as follows: $$T(\mathbf{X})\ge c_\alpha$$
+Math works will be similar in the other direction. Therefore, the two approaches are equivalent. 
+
+*Remark*: Can we decide significance level $\alpha$ _after_ calculating the p-value? 
+**NO**, and this will lead to "roving $\alpha$ fallacy". A quintessential plan is like: 
+
+**Example** Roving $\alpha$ Fallacy
+Set tentatively $\alpha = 0.01$. Upon observing the data and calculating a p-value $p(x_{obs})$,
+* If $p(x_{obs}) \ge 0.01$, they fail to reject $H_0$.
+- If $p(x_{obs}) < 0.01$, they reject $H_0$. However, instead of reporting the level as 0.01, they search for the smallest "impressive" level $\alpha^* \in \{0.01, 0.001, 0.0001, \dots\}$ such that $p(x_{obs}) < \alpha^*$, and report "Rejected at level $\alpha^*$".
+
+*What is the real Type I Error?*
+A rejection occurs if and only if the observed p-value is strictly less than the initial threshold $\alpha_{\text{max}} = 0.01$. $$R = \{\mathbf{x} : p(\mathbf{x}) < 0.01\}$$$$\mathbb{P}_{H_0}(\text{Type I Error}) = \mathbb{P}_{H_0}(\mathbf{X} \in R) = \mathbb{P}_{H_0}(p(\mathbf{X}) < 0.01)$$
+The rightmost probability is exactly 0.01, citing that $\mathbb{P}_{H_0}(p(\mathbf{X}) < 0.01)$ follows $\mathrm{Unif}(0,1)$. No matter what we report, the Type I Error rate is still 0.01!
+
+## 3.3 Interval Estimation
+The lecture notes and slides skip C&B's introduction of how to find a interval rule and jump directly to the methods of evaluating interval estimators. 
+
+**Def** Interval estimate
+An *interval estimate* of a real-valued parameter $\theta$ is any pair of functions, $L(x_1, \dots, x_n)$ and $U(x_1, \dots, x_n)$, of a sample that satisfy $L(\mathbf{x})\le U(\mathbf{x})$ for all $\mathbf{x}\in \mathcal{X}$. If $\mathbf{X} = \mathbf{x}$ is observed, the inference $L(\mathbf{x})\le \theta \le U(\mathbf{x})$ is made. (*Remark*: One example of making an inference of this kind is using the underlying Neyman-Pearson frequentist formalism.) The random interval $[L(\mathbf{X}), U(\mathbf{X})]$ is called an *interval estimator*. 
+
+**Def** Coverage probability
+For an interval estimator $[L(\mathbf{X}), U(\mathbf{X})]$ of a parameter $\theta$, the *coverage probability* of $[L(\mathbf{X}), U(\mathbf{X})]$ is the probability that the random interval $[L(\mathbf{X}), U(\mathbf{X})]$ covers the true parameter $\theta$. It is denoted as $$\mathbb{P}_\theta(\theta\in[L(\mathbf{X}), U(\mathbf{X})]).$$
+*Remark*: A very intuitive way to evaluate the coverage probability is to use MC: Generate 1000 $\mathbf{x}$ generated from the distribution of $\mathbf{X}$. Then evaluate the interval estimator with some rule and then calculate the number of such intervals containing the true parameter. 
+
+**Def** Confidence coefficient
+For an interval estimator $[L(\mathbf{X}), U(\mathbf{X})]$ of a parameter $\theta$, the *confidence coefficient* of $[L(\mathbf{X}), U(\mathbf{X})]$ is the infimum of the coverage probabilities, $$\inf_\theta\mathbb{P}_\theta(\theta\in[L(\mathbf{X}), U(\mathbf{X})]).$$
+*Remark*: See Surya's lecture notes Figure 3.3. It is a brilliant demonstration why the confidence coefficient is a *worst-case* coverage probability taken from all $\theta$. 
+
+**Def** Confidence interval
+Interval estimators, with a measure of confidence (usually a confidence coefficient), are known as *confidence intervals*. We can extend this definition to more generalized sets, called a *confidence sets*. A confidence set with a confidence coefficient of $1-\alpha$ is called a $1-\alpha$ confidence set. 
+
+*Remark*: The confidence is merely a guarantee before observing data. It is the property of the method, not the property of the specific interval obtained from the method.

@@ -126,6 +126,11 @@ This follows that the ratio of the two pdfs is $$\frac{f(\mathbf{x}\mid \mu)}{q(
 In general, what is **the Sufficient Principle**? 
 If $T(\mathbf{X})$ is a sufficient statistic for $\theta$, then any inference about $\theta$ should depend on the sample $\mathbf{X}$ only through the value $T(\mathbf{X})$. That is if $\mathbf{x}$ and $\mathbf{y}$ are two sample points s.t. $T(\mathbf{x}) = T(\mathbf{y})$, then the inference about $\theta$ should be the same whether $\mathbf{X} = \mathbf{x}$ or $\mathbf{X} = \mathbf{y}$ is observed. 
 
+## 2.5 Three Inference Tasks
+* Hypothesis testing
+* Prediction
+* Population feature estimation
+
 (If time permits, to be added: Finding Normal sufficient statistic for $\sigma^2, \mu$ simultaneously unknown; extra book problems about sufficiency)
 
 
