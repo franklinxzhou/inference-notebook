@@ -189,9 +189,23 @@ With the invariance property of MLE, we can write $$\widehat{\zeta} = \frac{1-\f
 The asymptotic variance is given by $$\sigma^2 = (\zeta')^2I(p)^{-1} = \left(-\frac{2}{p^3}+\frac{1}{p^2}\right)^2p^2(1-p) = \left(-\frac{2}{p^2}+\frac{1}{p}\right)^2(1-p) = \frac{(p-2)^2(1-p)}{p^4},$$ which follows the consistent estimator $$\widehat{\sigma^2} = \text{(very complex, not going to plug in }\widehat{p}_\text{MLE})$$
 (b) $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Rayleigh}(\theta)$, $\theta > 0$, with pdf $f(x|\theta) = \frac{x}{\theta^2} e^{-x^2/(2\theta^2)}$ for $x > 0$.
 Feature of interest: $\zeta = \mathbb{E}[X_1^2]$.
+
+The unit score function is $$S(x,\theta) = -\frac{2}{\theta}+\frac{x^2}{\theta^3}$$ and the second derivative is $$\dot{S}(x,\theta) = \frac{2}{\theta^2} - \frac{3x^2}{\theta^4}$$
+We can find the Fisher Information $$I = -\mathbb{E}[\dot{S}(x,\theta)] = -\frac{2}{\theta^2}+\frac{3\mathbb{E}(X^2)}{\theta^4} = -\frac{2}{\theta^2}+\frac{6}{\theta^2} = \frac{4}{\theta^2}$$
+Set the score function to zero, $$\dot{\ell}(\widehat{\theta}) = \sum_{i=1}^n \left(-\frac{2}{\widehat{\theta}}+\frac{x_i^2}{\widehat{\theta}^3}\right)\overset{\text{set}}{=}0$$
+$$\widehat{\theta} = \sqrt{\frac{\overline{X^2}}{2}}$$
+
+Notice that we are interested in $$\zeta(\theta) = \mathbb{E}(X_1^2) = \int_0^\infty 2x_1\cdot \frac{x_1}{\theta^2} e^{-x_1^2/(2\theta^2)}\,dx_1 = 2\theta^2$$
+By the invariance property of MLE, we obtain the MLE of $\zeta$, $$\widehat{\zeta} = \overline{X^2}$$
+$$\zeta'(\theta) = 4\theta,$$ which follows that the asymptotic variance $$\sigma^2 = (4\theta)^2\cdot \left(\frac{\theta^2}{4}\right) = 4\theta^4$$ $$\widehat{\sigma^2} = \left(\overline{X^2}\right)^2$$
 (c) $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Beta}(\theta, 1)$, $\theta > 0$, with pdf $f(x|\theta) = \theta x^{\theta-1}$ for $0 < x < 1$.
 Feature of interest: $\zeta = \mathbb{E}[X_1]$.
 ### 4.3.3 M-Estimators
+When $\mathscr{F}$ is a nonparametric family, the maximum $\ell(f) = \sum_{i=1}^n\log f(x_i)$ goes to infinity, leaving the MLE nonexistent. While for the cases of $\zeta$ being a smooth function of a population mean, we can use MoM to generate a CAN estimation, but this does not apply to all $\zeta$. 
+
+For a generic random sample $X_1, dots, X_n\overset{\text{iid}}{\sim} f$, $f\in \mathscr{F}$, suppose the population feature of interest is $\theta(f)\in \mathbb{R}^k$. Suppose that there is a known discrepancy function $\rho(x,\theta)$ s.t. $h(\theta) = \mathbb{E}[\rho(X_1, \theta)\mid f]$ is unique minimized at some $\theta = \theta(f)$, then the point of minimum $\widehat{\theta}$ of the function $$h_n(\theta) = \frac{1}{n}\sum_{i=1}^n \rho(X_i, \theta)$$ is called an *M-estimator*.
+
+For parametric $\mathscr{F}$, MLE is an M-estimator in the sense that $\rho(x,\theta) = -\log f(x\mid \theta)$. 
 
 ## 4.4 Bootstrap
 
